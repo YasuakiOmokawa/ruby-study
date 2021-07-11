@@ -4,6 +4,6 @@ source "https://rubygems.org"
 
 git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
-# gem "rails"
 gem 'activerecord'
-gem 'benchmark'
+gem 'benchmark-ips'
+gem 'sqlite3'
