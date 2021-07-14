@@ -25,3 +25,13 @@ def root(y)
 end
 p root(2) # => 1.4142135623730951
 
+# clone, dup
+ary = ['string']
+p ary             #=> ["string"]
+copy = ary.clone
+p copy            #=> ["string"]
+ary[0][0...3] = ''
+p ary             #=> ["ing"]
+p copy            #=> ["ing"]
+p ary.object_id
+p copy.object_id
