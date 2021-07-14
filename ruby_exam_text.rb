@@ -8,3 +8,20 @@ emordnilap = palindrome.reverse
 p emordnilap.reverse #=&gt; ?
 p emordnilap.reverse! #=&gt; ?
 p emordnilap #=&gt; ?
+
+# assoc
+ary = [[1,2], [3,4], [5,6]]
+p ary.assoc 2 # -> nil
+p ary.assoc 1 # -> [1,2]
+
+# bsearch
+def square(x)
+  x * x
+end
+def root(y)
+  (0..Float::INFINITY).bsearch do |x|
+    y < square(x)
+  end
+end
+p root(2) # => 1.4142135623730951
+
