@@ -35,3 +35,10 @@ p ary             #=> ["ing"]
 p copy            #=> ["ing"]
 p ary.object_id
 p copy.object_id
+
+# each_with_object
+arr = [1,2,3]
+res = arr.each_with_object([1,2,3]) do |item, memo|
+  memo << item * 2
+end
+p res # => [1,2,3,2,4,6]
