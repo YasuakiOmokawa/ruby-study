@@ -50,3 +50,8 @@ switch = %i[on off].cycle
 switch.next # => on
 switch.next # => off
 switch.next # => on
+# 累乗計算
+arr2 = [*1..10].concat([*2..9].reverse)
+arr2.cycle do |num|
+  puts 'w' * (num ** 2)
+end
