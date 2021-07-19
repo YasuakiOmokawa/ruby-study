@@ -42,3 +42,11 @@ res = arr.each_with_object([1,2,3]) do |item, memo|
   memo << item * 2
 end
 p res # => [1,2,3,2,4,6]
+
+# cycle
+arr = %i[a b c]
+arr.cycle(3) { |x| puts x } # => a,b,c,a,b,c,a,b,c
+switch = %i[on off].cycle
+switch.next # => on
+switch.next # => off
+switch.next # => on
