@@ -55,3 +55,9 @@ arr2 = [*1..10].concat([*2..9].reverse)
 arr2.cycle do |num|
   puts 'w' * (num ** 2)
 end
+
+# reject
+a = [0, 1, 2, 3, 4, 5]
+e = a.reject!
+e.each{|i| i % 2 == 0}
+p a                    #=> [1, 3, 5]  もとの配列から削除されていることに注意。
