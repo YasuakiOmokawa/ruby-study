@@ -66,3 +66,7 @@ p a                    #=> [1, 3, 5]  もとの配列から削除されている
 a = [{foo: :bar}, {hoge: :fuga}]
 a.dig(0, :foo) # => :bar
 a.dig(1, :hoge) # => :fuga
+
+# first
+ary = [0, 1, 2]
+p ary.first
