@@ -61,3 +61,8 @@ a = [0, 1, 2, 3, 4, 5]
 e = a.reject!
 e.each{|i| i % 2 == 0}
 p a                    #=> [1, 3, 5]  もとの配列から削除されていることに注意。
+
+# Array#dig
+a = [{foo: :bar}, {hoge: :fuga}]
+a.dig(0, :foo) # => :bar
+a.dig(1, :hoge) # => :fuga
