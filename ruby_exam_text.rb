@@ -73,3 +73,13 @@ p ary.first
 
 # keep_if
 %w(a b c d e).keep_if { |w| w =~ /[aiueo]/ } #=> ['a', 'e']
+
+# minmax
+a = %w(albatross dog horse ho)
+a.minmax                                 #=> ["albatross", "horse"]
+a.minmax{|a,b| a.length <=> b.length }   #=> ["dog", "albatross"]
+
+# none
+%w{ant bear cat}.none? {|word| word.length == 5}  # => true
+%w{ant bear cat}.none? {|word| word.length >= 4}  # => false
+%w{ant bear cat}.none?(/d/)                       # => true
