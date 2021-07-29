@@ -70,3 +70,6 @@ a.dig(1, :hoge) # => :fuga
 # first
 ary = [0, 1, 2]
 p ary.first
+
+# keep_if
+%w(a b c d e).keep_if { |w| w =~ /[aiueo]/ } #=> ['a', 'e']
