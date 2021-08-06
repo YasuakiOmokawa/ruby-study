@@ -83,3 +83,10 @@ a.minmax{|a,b| a.length <=> b.length }   #=> ["dog", "albatross"]
 %w{ant bear cat}.none? {|word| word.length == 5}  # => true
 %w{ant bear cat}.none? {|word| word.length >= 4}  # => false
 %w{ant bear cat}.none?(/d/)                       # => true
+
+# permutation 順列の作成
+a = [1, 2, 3]
+a.permutation.to_a     #=> [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+a.permutation(1).to_a  #=> [[1],[2],[3]]
+a.permutation(2).to_a  #=> [[1,2],[1,3],[2,1],[2,3],[3,1],[3,2]]
+a.permutation(3).to_a  #=> [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
