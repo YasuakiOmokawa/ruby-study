@@ -101,3 +101,10 @@ a.repeated_combination(4).to_a  #=> [[1,1,1,1],[1,1,1,2],[1,1,1,3],[1,1,2,2],[1,
                                 #    [1,1,3,3],[1,2,2,2],[1,2,2,3],[1,2,3,3],[1,3,3,3],
                                 #    [2,2,2,2],[2,2,2,3],[2,2,3,3],[2,3,3,3],[3,3,3,3]]
 a.repeated_combination(0).to_a  #=> [[]] # one combination of length 0
+
+# sample
+a = (1..10).to_a
+p a.sample
+p a.sample
+p a.sample(3)
+p a               #=> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
