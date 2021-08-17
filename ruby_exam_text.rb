@@ -108,3 +108,8 @@ p a.sample
 p a.sample
 p a.sample(3)
 p a               #=> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+# ランダムにしていくつかの配列に分割
+a = (1..10).to_a.shuffle!
+i = a.size/3.floor
+i.times.each { p a.shift i }
