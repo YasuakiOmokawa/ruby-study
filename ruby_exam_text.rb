@@ -113,3 +113,12 @@ p a               #=> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 a = (1..10).to_a.shuffle!
 i = a.size/3.floor
 i.times.each { p a.shift i }
+
+# 範囲選択
+# http://www.minituku.net/drills/775230600.html
+# https://docs.ruby-lang.org/ja/latest/class/Range.html
+(1...5) # 1 < x < 5
+p (1...5).to_a.map { |i| i * 10} # [10,20,30,40]
+p [1, 2, 3, 4].zip([10, 10, 10, 10]) # [[1,10],[2,20],[3,30],[4,40]]
+p (10..40).to_a # [10,11,12,13,14,15,..35,36,37,38,39,40]
+p [1, 2, 3, 4].select{|i| i * 10} # [1,2,3,4]
