@@ -122,3 +122,37 @@ p (1...5).to_a.map { |i| i * 10} # [10,20,30,40]
 p [1, 2, 3, 4].zip([10, 10, 10, 10]) # [[1,10],[2,20],[3,30],[4,40]]
 p (10..40).to_a # [10,11,12,13,14,15,..35,36,37,38,39,40]
 p [1, 2, 3, 4].select{|i| i * 10} # [1,2,3,4]
+
+# エラーとなるコードについて
+# https://docs.ruby-lang.org/ja/latest/class/Range.html
+# ng argument error
+def foo(x)
+  puts x
+end
+foo()
+
+# ok
+n = 10
+n.times do |i|
+  puts i + n
+end
+
+# ng argument error
+def bar
+  puts n
+end
+n = 10
+bar(n)
+
+# ng undefined local value
+10.times do |i|
+  n = i
+  puts n
+end
+puts n
+
+# 範囲の値について
+# https://docs.ruby-lang.org/ja/latest/class/Range.html
+s = 0xBacFace # 195885774
+s += 1 # 195885775
+puts s # not error
