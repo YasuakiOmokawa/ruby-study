@@ -156,3 +156,17 @@ puts n
 s = 0xBacFace # 195885774
 s += 1 # 195885775
 puts s # not error
+
+# 文字列クラス
+# https://docs.ruby-lang.org/ja/latest/class/Range.html
+p "abcdefg"[2..3] #cd
+p ['a', 'b', 'c','d','e'][0..2].join # abc
+p 'abcdefg' - 'ab' - 'fg' # undefined - method error
+p 'abcdefg'[2, 3] #cde
+
+# 正常に実行が完了するコード
+# https://docs.ruby-lang.org/ja/latest/class/Range.html
+10.+('10') # string can't be coerced into Integer
+1..10.to_s # invalid range error
+10.*(0xFace) # ok
+Time.now.strftime(1999,12,11) # not formatted error
