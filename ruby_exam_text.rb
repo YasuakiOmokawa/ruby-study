@@ -179,3 +179,15 @@ foo(1,2,3,4) # 1
 
 # https://gist.github.com/sean2121/945035ef2341f0c39bf40762cd8531e0#%E5%95%8F%E9%A1%8C3-%E4%BB%A5%E4%B8%8B%E3%81%AE%E3%82%B3%E3%83%BC%E3%83%89%E3%82%92%E5%AE%9F%E8%A1%8C%E3%81%97%E3%81%9F%E6%99%82%E3%81%AE%E5%87%BA%E5%8A%9B%E3%81%A8%E3%81%97%E3%81%A6%E6%AD%A3%E3%81%97%E3%81%84%E3%82%82%E3%81%AE%E3%82%921%E3%81%A4%E9%81%B8%E6%8A%9E%E3%81%97%E3%81%A6%E3%81%8F%E3%81%A0%E3%81%95%E3%81%84
 puts({"members" => 193, "year" => 2014}.size) # 2
+
+# q4
+t = Time.now + (60*60*24)
+p t # 1 days after
+
+# q6
+(5..8).each_with_index do |val,i|
+puts "#{i} #{val}" # 0..3, 5..8
+end
+
+# q7
+p 100.downto(90).select{|x| x%2==0} # [100,98,..,90]
