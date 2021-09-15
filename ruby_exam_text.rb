@@ -191,3 +191,23 @@ end
 
 # q7
 p 100.downto(90).select{|x| x%2==0} # [100,98,..,90]
+
+# q8
+# same result
+p [1,1,2,3,5,8].collect {|x| x*2}
+p [1,1,2,3,5,8].map {|x| x*2}
+
+# q9
+puts "Ruby on Rails".delete("Rails") # 'uby on '
+puts "Ruby on Rails".delete("uos") # 'Rby n Rail'
+
+# q10
+# below has no error at all
+doc = <<-EOF
+ The quick brown fox
+ jumps over the lazy dog
+      EOF
+doc2 = <<EOF
+ The quick brown fox
+ jumps over the lazy dog
+EOF
