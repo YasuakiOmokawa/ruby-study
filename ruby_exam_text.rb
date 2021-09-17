@@ -211,3 +211,17 @@ doc2 = <<EOF
  The quick brown fox
  jumps over the lazy dog
 EOF
+
+# q11
+h = {1=>2, 3=>4}
+h.clear
+p h   #=>{}
+
+ary = [1, 2]
+ary.clear
+p ary     #=>[]
+
+# q12
+a = [1,2,3,4,5]
+p a[0..2]    #=>[1,2,3]
+p a.slice(0,3)    #=>[1,2,3]
