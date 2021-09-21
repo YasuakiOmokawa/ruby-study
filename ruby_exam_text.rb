@@ -225,3 +225,37 @@ p ary     #=>[]
 a = [1,2,3,4,5]
 p a[0..2]    #=>[1,2,3]
 p a.slice(0,3)    #=>[1,2,3]
+
+# q13
+str = "RubyAssociation".chomp # 'RubyAssociation'
+
+# q14
+str = "RubyAssociation\r\n".chop # 'RubyAssociation'
+
+# q15
+File.open("foo.txt","r") do |io|
+  puts io.gets
+  puts io.read
+  io.rewind
+  p 'move first pointer'
+  p lines = io.readlines(chomp: true) # ポインタが先頭に戻ったので全行読み込んで配列に格納
+end
+
+# q16
+mozart = ["Symphony","Piano Concerto", "Violin Concerto","Horn Concerto","Violin Sonata"]
+listend = ["Symphony","Violin Concerto","Horn Concerto"]
+p mozart - listend # ["Piano Conerto","Violin Sonata"]
+
+# q17
+odd = [1,3,5]
+even = [2,4,6]
+num = odd + even
+p num.sort # [1,2,3,4,5,6]
+
+# q19
+Greeting = "Hello Ruby"
+Greeting = "Hi Ruby"
+p Greeting # warning and puts 'Hi Ruby'
+
+# q20
+p File.join("ruby", "exam","silver") # ruby/exam/silver
