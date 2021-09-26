@@ -283,3 +283,8 @@ puts "#{a.v},#{a.s}" # 50,10
 string = "test code"
 string.slice(0,4)
 p string #test code
+
+#q22
+string = "test code"
+string.slice(0,4)
+p string # test code
