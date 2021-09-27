@@ -288,3 +288,10 @@ p string #test code
 string = "test code"
 string.slice(0,4)
 p string # test code
+
+#q23
+puts "ruby".encoding.name #error
+
+#q24
+cc = {"nz"=>"New Zealand", "ru"=>"Russia", "ar"=>"Argentina"}
+cc.contain?('nz') #error
