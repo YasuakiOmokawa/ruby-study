@@ -295,3 +295,19 @@ puts "ruby".encoding.name #error
 #q24
 cc = {"nz"=>"New Zealand", "ru"=>"Russia", "ar"=>"Argentina"}
 cc.contain?('nz') #error
+
+#q25
+p "Hello there".class # String
+p String.superclass # Object
+
+class Foo; end
+class Bar < Foo; end
+p Foo.superclass #Object
+p Bar.superclass #Foo
+
+#q26
+s = "To be or not to be, that is the question."
+hash = Hash.new(0)
+s.scan(/\w+/) {|i| hash[i] += 1}
+p hash["be"] #=>2
+
