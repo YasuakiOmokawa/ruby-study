@@ -311,3 +311,11 @@ hash = Hash.new(0)
 s.scan(/\w+/) {|i| hash[i] += 1}
 p hash["be"] #=>2
 
+#28
+# error
+s = "foo"
+begin
+  s[4] = ?b
+rescue IndexError
+  puts "error"
+end
