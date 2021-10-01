@@ -319,3 +319,28 @@ begin
 rescue IndexError
   puts "error"
 end
+
+#29
+ary = []
+ary << 1 && false
+true || ary << 2
+false && ary << 3
+false || ary << 4
+p ary # [1,4]
+
+#30
+p "foo" * 2 **2 #foofoofoofoo
+
+#31
+foo = [1,2,3]
+bar = foo
+baz = foo.dup
+
+bar[3] = 4
+p foo #[1,2,3,4]
+p bar #[1,2,3,4]
+p baz #[1,2,3]
+
+#33
+str = "a,b,c,d"
+p str.split(/,/, 2) #['a', 'b,c,d']
