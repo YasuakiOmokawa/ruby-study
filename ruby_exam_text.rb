@@ -344,3 +344,22 @@ p baz #[1,2,3]
 #33
 str = "a,b,c,d"
 p str.split(/,/, 2) #['a', 'b,c,d']
+
+#34
+class Object
+  def greeting
+    print "How are you?\n"
+  end
+end
+[1,2].greeting #'How are you?'
+
+#37
+File.open("foo.txt") do |io|
+  io.write(Time.now.strftime("%Y/%m/%d"))
+end # not opened for writing (IOError)
+
+#39
+puts "0123456789".delete("0-58-") #679
+
+#40
+p "100,200,300,400,500".split(',').join('\n')
