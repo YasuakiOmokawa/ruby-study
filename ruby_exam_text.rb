@@ -363,3 +363,31 @@ puts "0123456789".delete("0-58-") #679
 
 #40
 p "100,200,300,400,500".split(',').join('\n')
+
+#41
+a = "foo"
+b = "foo"
+
+puts a.eql?(b) #true
+puts a.equal?(b) #false
+
+#42
+numbers = [3,89,40,39,29,10,50,59,69]
+num = numbers.inject do |i,j|
+  i > j ? i : j
+end
+p num #89
+
+#43
+p String.instance_methods.grep(/strip/) # [methods includes 'strip' character]
+
+#44
+capital ={:Sweden =>"Stockholm", :Norway=>"Oslo", :Finland=>"Helsinki1"}
+capital = {Sweden: "Stockholm", Norway: "Oslo", Finland: "Helsinki2"}
+capital = {"Sweden" = "Stockholm", "Norway" = "Oslo", "Finland" = "Helsinki3"} # error
+capital = Hash[:Sweden,  "Stockholm", :Norway ,"Oslo", :Finland, "Helsinki4"]
+
+#45
+require 'uri'
+uri = URI::HTTP.build({host:'www.ruby.or.jp', path:'/ja/certification/examination/'})
+puts uri # http://www.ruby.or.jp/ja/certification/examination/
