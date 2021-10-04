@@ -391,3 +391,42 @@ capital = Hash[:Sweden,  "Stockholm", :Norway ,"Oslo", :Finland, "Helsinki4"]
 require 'uri'
 uri = URI::HTTP.build({host:'www.ruby.or.jp', path:'/ja/certification/examination/'})
 puts uri # http://www.ruby.or.jp/ja/certification/examination/
+
+#46
+class Foo
+  @@num = 0
+  def self.count
+    @@num += 1
+  end
+end
+
+class Bar < Foo
+end
+
+puts Foo.count #1
+puts Bar.count #2
+
+#47
+# 'Hello'
+unless false || nil
+  print "Hello\n"
+end
+
+#48
+numbers = (1..20).to_a
+p numbers.detect{|x| x % 5 == 0} #5
+
+#49
+# non ascii character detected : ルビーアソシエーション non ascii character detected : るびー
+class NonasciiError < StandardError
+end
+
+File.open("sample.txt") do |io|
+  io.each_line do |str|
+    begin
+      raise(NonasciiError, "non ascii character detected") unless str.ascii_only?
+    rescue => ex
+      puts "#{ex.message} : #{str}"
+    end
+  end
+end
