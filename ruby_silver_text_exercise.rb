@@ -25,3 +25,23 @@ rescue TypeError
 ensure
   puts 'Ensure.'
 end
+
+#4
+puts 090 # error
+
+#5
+x = 10
+y = x < 10 ? "A" : "B"
+puts y #B
+
+#6
+MAX=10
+print MAX #10
+MAX=100 #warning
+print MAX #100
+
+#7
+def foo(*a)
+  p a
+end
+foo(1,2,3) #[1,2,3]
