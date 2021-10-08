@@ -45,3 +45,98 @@ def foo(*a)
   p a
 end
 foo(1,2,3) #[1,2,3]
+
+#8
+1,2,4
+
+#9
+class Hoge
+  attr_reader: :message
+
+  def initialize
+    @message = 'Hello'
+  end
+end
+class Piyo < Hoge
+  def initialize
+    @message = 'Hi'
+    super
+  end
+end
+puts Piyo.new.message #Hello
+
+#10
+include Math
+def area r
+  return r * r * PI
+end
+area 3
+
+def area r
+  return r * r * Math::PI
+end
+area 4
+
+#11
+2,5
+
+#12
+s = 'Hello'
+def s.greet
+  puts 'Hi'
+end
+class String
+  def greet
+    puts 'Hello'
+  end
+end
+s.greet #Hi
+
+#13
+class Employee
+  attr_reader :id
+  attr_accessor :name
+
+  def initialize id, name
+    @id = id
+    @name = name
+  end
+  def to_s
+    return "#{@id}:#{@name}"
+  end
+  def <=> other
+    return self.id <=> other.id
+  end
+end
+employees = []
+employees << Employee.new('3', 'tanaka')
+employees << Employee.new('2', 'suzuki')
+employees << Employee.new('1', 'sato')
+employees.sort!
+employees.each { |e| puts e }
+
+#14
+a = [1,2,3,4]
+b = [1,3,5,7]
+c = a & b
+c.each {|i| print i, ' '}
+
+#15
+a = [1,2,3,4]
+a[0..-2].each { |i| print i, ' ' }
+
+a[0,3].each { |i| print i, ' ' }
+
+#16
+1,2
+
+#17
+a1 = %w(a b)
+a2 = %w(x y)
+a3 = a1.zip(a2)
+a3.first #[a,x]
+
+#18
+a = [1,2,3,4,5]
+p a.slice(1,3) #[2,3,4]
+
