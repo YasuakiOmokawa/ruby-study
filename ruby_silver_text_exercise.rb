@@ -140,3 +140,15 @@ a3.first #[a,x]
 a = [1,2,3,4,5]
 p a.slice(1,3) #[2,3,4]
 
+#19
+a = 'abc'
+b = 'abc'
+print a.eql? b #true
+print a.equal? b #false
+print a == b #true
+
+#20
+puts 5 + 'Hello' #error
+puts 'Hello' + 5 #error
+puts 'Hello' * 5 #not error
+puts 5 * 'Hello' #error
