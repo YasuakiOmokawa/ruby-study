@@ -152,3 +152,34 @@ puts 5 + 'Hello' #error
 puts 'Hello' + 5 #error
 puts 'Hello' * 5 #not error
 puts 5 * 'Hello' #error
+
+#21
+s = <<"EOB"
+Hello,
+Ruby
+World.
+EOB
+"EOB"
+p s #Hello, Ruby World.
+
+#22
+s1 = 'Hoge'
+s2 = 'Fuga'
+s1.concat(s2) #HogeFuga
+s1.chop #HogeFug
+s1.chomp #HogeFug
+s1+s2
+p s1 #HogeFuga
+
+#23
+s = '123456789'
+p s[1,4] #2345
+
+#24
+member = [10, 'Tanaka']
+print "ID:%2d Name:%s" % member #ID:10 Name:Tanaka
+
+#25
+h = {}
+{a: 1,b:2}.invert #{1: :a,2: :b}
+#1,3
