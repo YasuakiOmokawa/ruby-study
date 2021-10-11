@@ -183,3 +183,24 @@ print "ID:%2d Name:%s" % member #ID:10 Name:Tanaka
 h = {}
 {a: 1,b:2}.invert #{1: :a,2: :b}
 #1,3
+
+#26
+h = {a: 1}
+h.remove #error
+
+#27
+h1 = {a: 1,b: 2}
+h2 = Hash[:a,1,:b,2]
+p h1 #{:a=>1, :b=>2}
+p h2 #{:a=>1, :b=>2}
+
+#28
+File.open('data') do |io|
+  # loop print 'a'
+  while not io.eof?
+    print io.read(1)
+    io.seek(0,IO::SEEK_SET)
+  end
+end
+
+
