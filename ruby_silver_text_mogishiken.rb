@@ -66,3 +66,74 @@ print 4.to_square #16
 
 #m13
 p '12abc'.to_i #12
+
+#14
+a = [1,2,3,4]
+p a[1...3] #[2,3]
+
+#15
+a = [1,2,3,4,5]
+p a[2..-1] #[3,4,5]
+
+#16
+a = 1,2,3
+a.join(',')
+
+#17
+s = 'a;b:c;d:e;f'
+p s.split(/:|;/)
+
+#18
+a = [1,2,3]
+b = [1,3,5]
+c = a
+a = b & c
+p a + b + c
+
+#19
+a = [1,2,3,4]
+b = [1,3,5,7]
+p a || b #[1,2,3,4]
+
+#20
+def sum(*a)
+  total = 0
+  a.each {|i| total += i}
+  return total
+end
+puts sum(1,2,3,4,5)
+
+#21
+a = [1,2,3]
+b = [1,3,5]
+c = [2,3,4]
+p a+b-c #[1,1,5]
+
+#22
+a = [0, 1, 2, 3, 4, 5]
+a.delete_if{|x| x % 2 == 0}
+p a #=> [1, 3, 5]
+
+b = [0, 1, 2, 3, 4, 5]
+b.reject!{|x| x % 2 == 0}
+p b #=> [1, 3, 5]
+
+#23
+a = [:a,:b,:c,:d]
+a.each_with_index {|item,i| print "#{i}:#{item}\n"}
+
+#24
+s = %w[a b c]
+s.shift
+s.shift
+s.unshift
+s.push 'd'
+p s #[c,d]
+
+#25
+a =[:a,:a,:b,:c]
+a[5] = :e
+a.concat [:a,:b,:c]
+a.compact
+a.uniq
+p a # [:a,:a,:b,:c,nil,:e,:a,:b,:c]
