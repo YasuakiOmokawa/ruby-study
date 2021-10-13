@@ -137,3 +137,28 @@ a.concat [:a,:b,:c]
 a.compact
 a.uniq
 p a # [:a,:a,:b,:c,nil,:e,:a,:b,:c]
+
+#26
+p [1, 2, 3, 4, 5].find {|i| i % 3 == 0 }   # => 3
+p [1, 2, 3, 4, 5].detect {|i| i % 3 == 0 }   # => 3
+
+#27
+a = [1,2,3]
+p a.collect {|v| v*2} #[2,4,6]
+p a.map {|v| v*2} #[2,4,6]
+
+#28
+sa = %w(a b c)
+sa.each {|v| print "#{v} "}
+
+#29
+a = %w[a b c]
+b = [*1..3]
+a.zip(b).each {|x| p x} #[a,1],[b,2],[c,3]
+
+#30
+s = <<EOB
+i am
+a boy
+EOB
+p s
