@@ -162,3 +162,28 @@ i am
 a boy
 EOB
 p s
+
+#32
+a = 'Ruby'
+b = 'Rails'
+b = a
+a.upcase
+print b #Ruby
+
+#33
+p 'find!find!'.index('!',5) #9
+
+#34
+x = 'Hello, World.\n'
+x.chop #Hello, World.
+x.chop #Hello, World.
+x.chomp #Hello, World.
+p x #Hello, World.\n
+
+#35
+a = 'abcdefghijk'
+a[1,3] = 'x'
+print a,'\n' #axefghijk
+b = 'abcdefghijk'
+b[1..3] = 'x'
+print b,'\n' #axefghijk
