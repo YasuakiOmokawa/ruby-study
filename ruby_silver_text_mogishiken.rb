@@ -187,3 +187,15 @@ print a,'\n' #axefghijk
 b = 'abcdefghijk'
 b[1..3] = 'x'
 print b,'\n' #axefghijk
+
+#36
+'hogepiyohogehoge'.slice(/o../) #oge
+
+#37
+puts '0123456789-'.delete('^13-56-') #13456-
+
+#38
+'123'.match(/^[0-9][0-9]*$/) #123
+'12a3'.match(/^[0-9][0-9]*$/) #nil
+'123a'.match(/^[0-9][0-9]*$/) #nil
+''.match(/^[0-9]*$/) #match ''
