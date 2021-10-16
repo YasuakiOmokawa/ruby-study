@@ -199,3 +199,51 @@ puts '0123456789-'.delete('^13-56-') #13456-
 '12a3'.match(/^[0-9][0-9]*$/) #nil
 '123a'.match(/^[0-9][0-9]*$/) #nil
 ''.match(/^[0-9]*$/) #match ''
+
+#39
+p 'ab 123 gg 456 dd'.scan(/\d+/).length #2
+
+#40
+p 65.chr #A
+p 'A'.ord #65
+
+#41
+p 'HogeHOGEhoge'[%r![A-Z][^A-Z]+!] #Hoge
+
+#42
+h = {'a': 1, 'b': 2}
+p h #{:a => 1, :b => 2}
+
+#43
+h = {1 => 'a', 2 => 'b'}
+p h.invert #{'a' => 1, 'b' => 2}
+
+#44
+h = {1 => 'a', 2 => 'b'}
+h.reject {|x, y| x < 2} #{2 => 'b'}
+p h #{1 => 'a', 2 => 'b'}
+
+#45
+a = {'Foo' => 'Hoge', 'Bar' => 'Piyo', 'Baz' => 'Fuga'}
+b = {'Foo' => 'hoge', 'Bar' => 'piyo', 'Baz' => 'fuga'}
+a.update(b).sort{|a,b| a[1] <=> b[1]}
+
+#47
+open('test.txt', 'r+') do |f|
+  data = f.read.chomp
+  data.reverse!
+  f.rewind
+  f.write data
+end
+
+#48
+puts File.join('/', 'usr','bin') #/usr/bin
+
+#49
+t = Time.local(2000,1,1)
+print t.strftime('%Y/%m/%d') #2000/01/01
+
+#50
+t1 = Time.gm(2010,1,1,0,0)
+t2 = Time.gm(2010,1,1,0,1)
+p t2 - t1 #60.0
