@@ -23,3 +23,4 @@ end
 counter = count(0) #0
 counter.call(1) #1
 counter.call(1) #2
+
