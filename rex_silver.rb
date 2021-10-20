@@ -129,3 +129,75 @@ p a1 | a2 #和集合で[1,2,3,4]
 
 hash = {price: 100, order_code: 200, order_date: "2018/09/20", tax: 0.8}
 p hash.values_at(:price, :tax) #[100,0.8]
+
+# 複数の例外を発生させるコード
+str = "xyz"
+enum = str.each_byte
+flg = nil
+begin
+  puts enum.next while true unless flg
+  raise KeyError.new
+rescue StopIteration => e
+  puts "#{e.message} is raise error"
+  flg = 1
+  retry
+rescue KeyError => e
+  puts "#{e.message} is a raises error"
+end
+
+x = 1 #integer
+y = 1.0 #float
+print x == y #true 数値が同一
+print x.eql?(y) #false 数値は同一だが型が違う
+print x.equal?(y) #false xとyとでobject_idが違う
+print x.equal?(1) #true ※object_idは、定数では変わらない
+
+class Foo
+  attr_accessor :a
+end
+foo = Foo.new
+foo.a = 'Rex'
+puts foo.a #Rex
+
+str = "-1234567890-"
+str.delete!('^2-41-')
+puts str #-1234-
+
+module MyModule
+end
+
+puts 0xG9 #16進数として認識されないので、error
+puts 0xF9 #9+16*15 = 249
+"0x10".hex #no error
+"010".oct #8
+"10G".to_i #10
+
+class Foo
+  @@foo = 0
+
+  def foo
+    @@foo
+  end
+
+  def foo=(value)
+    @@foo = value
+  end
+end
+foo1 = Foo.new
+foo2 = Foo.new
+foo1.foo += 1 #no error
+foo2.foo += 2 #no error
+puts "#{foo1.foo}/#{foo2.foo}" # 3/3 クラス変数はインスタンス間、サブクラス間で共有されるため
+
+class Foo
+  attr_accessor :foo
+
+  def initialize
+    @foo = 0
+  end
+end
+foo1 = Foo.new
+foo1.foo += 1
+foo2 = Foo.new
+foo2.foo += 2
+puts "#{foo1.foo}/#{foo2.foo}" #1/2
