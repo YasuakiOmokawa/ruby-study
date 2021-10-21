@@ -201,3 +201,15 @@ foo1.foo += 1
 foo2 = Foo.new
 foo2.foo += 2
 puts "#{foo1.foo}/#{foo2.foo}" #1/2
+
+a = [1, 2, 3, 4, 5]
+b = [2, 4, 6]
+(a - b).map(&:next) #[1,3,5]のそれぞれのnextなので [2,4,6]
+a & b #[2,4]
+a && b #aがtrueなのでbが呼ばれて[2,4,6]だと思ったが間違い
+a | b #[1,2,3,4,5,6]
+
+a = [1, 2, 3, 5, 8]
+b = [1, 3, 6, 7, 8]
+c = false || true ? true && false ? a | b : a & b : b ; # true, true, a|b
+p c # [1,3,8]
