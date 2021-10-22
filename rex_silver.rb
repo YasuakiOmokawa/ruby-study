@@ -213,3 +213,51 @@ a = [1, 2, 3, 5, 8]
 b = [1, 3, 6, 7, 8]
 c = false || true ? true && false ? a | b : a & b : b ; # true, true, a|b
 p c # [1,3,8]
+
+arr = [
+  "a".to_i(36), # 36進数のa = 10
+  "070".to_i(0), # 0なので文字列の先頭から判断。0は8進数なので 8*7=56
+  nil.to_i, #nilは0
+  "0b0001".to_i #ベースが規定されていないので10進数表記。変換対象は空文字もしくは文字列として扱うため、0
+]
+p arr
+
+arr = [5, 3, 8, 1, 4, 2, 6, 9, 0, 7]
+arr.sort!{ |a, b | b <=> a }.reverse! #逆順ソートの後にreverse!してるので、昇順になる
+p arr
+
+class Foo
+  attr_reader :a
+
+  def initialize
+    @a = "REx"
+  end
+end
+foo = Foo.new
+puts foo.a #REx
+
+(x, y), z = 1, 2, 3
+p z #3
+p y #nil
+
+("a".."d").each_with_index do |v, i|
+  puts "#{i} / #{v}"
+end
+=begin
+0 / a
+1 / b
+2 / c
+3 / d
+=end
+
+x,y,z = 1,[2,3]
+p z #nil
+p y #[2,3]
+
+v1 = false || 1 + 1 == 1.to_i #1+1 == 1.to_iが実行され、false
+puts v1 #false
+
+puts '80' #80
+puts 7.to_s(3) #3進数で7はどう表現されるかということなので、21となる
+puts 0xFF #15*15
+puts '7'.binary #NoMethodError
