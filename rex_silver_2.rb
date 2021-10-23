@@ -31,3 +31,35 @@ p 1.foo #fooはIntegerに定義されてないのでsyntaxerror
 
 arr = [1,2].product([3,4]).transpose
 p arr # [[1,3],[1,4],[2,3],[2,4]]の行列変換なので、[[1,1,2,2],[3,4,3,4]]
+
+str = "1;2:3;4"
+p str.split(/;|:/) #[1,2,3,4]
+
+a, = (1..5).partition(&:odd?) #partitionでブロック式のtrueとfalseの配列が返される。aはtrueのみ代入されるので[1,3,5]
+p a
+
+hoge = "a".to_a #stringをarrayには変換できない、エラー
+puts hoge.class
+
+a = [1, 2, 3, 4]
+p a[1..2] #配列のindex1,2を抽出する。[2,3]
+
+p [1,2,3,4].map do |e| e * e end # {}でないためmapとの結びつきよりもenumratorに配列を渡したことになる。<Enum [1,2,3,4]>
+
+str = "Liberty Fish   \r\n"
+str.strip!
+p str #strip!で両端の空白文字を削除する破壊的変更。空白文字には\r\nもふくまれる。'Liberty Fish'
+
+(10..15).to_a.map.with_index(1) do |elem, i|
+  puts i
+end
+=begin
+with_index(1)なので、indexは1から始まる。
+1
+2
+3
+4
+5
+6
+=end
+
