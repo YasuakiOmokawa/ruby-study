@@ -96,3 +96,72 @@ def foo(n)
 end
 puts foo(2) * 2 #2*2*2=8
 
+str = "abcdefghijk"
+p str[2...4] #2~3index目を取得。cd
+
+str = "1;2;3;4"
+p str.split(";") #[1,2,3,4]
+
+begin
+  1 / 0
+rescue
+  raise # ここで発生する例外はzerodivisionerror
+end
+
+h = {a: 100, b: 100}
+puts h.invert #キーが重複するときは最後の値が設定されるため、{100=>:b}
+
+a = [1,2,3,4]
+p a.slice(2,1) #2index目から1文字なので[3]
+
+a1 = "abc"
+a2 = 'abc'
+print a1.equal? a2 #false オブジェクトが不一致
+print a1.eql? a2 #true 値が一致
+
+arr = %i[apple banana orange].reverse
+arr.each do |i|
+  puts i
+end
+=begin
+reverseしたものを変数に格納しているため,
+orange
+banana
+apple
+の順番
+=end
+
+h = {a: 100, b: 200}
+h.delete(:a)
+p h #{:b=>200} deleteは破壊的メソッド
+
+s = <<-EOF
+      Hello,
+      Ruby
+      EOF
+p s #' Hello,\n Ruby\n'
+
+def hoge
+  x = 0
+  (1...5).each do |i|
+    x += 1
+  end
+  x
+end
+puts hoge #4回しか加算されないので4
+
+a = "Ruby"
+b = " on Rails"
+a.append b
+a.reverse
+p a.index("R", 1) #stringにappendはない。エラー
+
+puts 080 #8進数に8はない。エラー
+puts 070 #8進数として解釈される
+
+io = File.open('list.txt')
+while not io.eof?
+  io.readlines
+  io.seek(0, IO::SEEK_CUR)
+  p io.readlines
+end #readlinesで最後のlineまできて、現在位置から0バイト移動し、ふたたびreadlinesする。最後のlineなので、[]
