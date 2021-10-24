@@ -63,3 +63,36 @@ with_index(1)なので、indexは1から始まる。
 6
 =end
 
+arr = (1..30).to_a
+container = []
+arr.each_cons(7) do |i|
+  container << i
+end
+p container.length #each_cons(7)は7を1ブロックにして1つずつ値をずらしながらループする。30-7+ずらし分の1=24なので、24つの配列ができる
+
+a1 = [1,2,3]
+a2 = [4,2,3]
+p a1 - a2 #2,3が取り除かれるので1
+
+h = Hash[] #からハッシュの作成
+h.fetch('key') # キーに紐づくデータの取得
+
+v1 = 1 - 1 == 0
+v2 = v1 || raise RuntimeError #raiseはシンタックスエラー
+puts v2 && false
+
+str = "Liberty Fish   \r\n"
+str.chop
+p str #末尾の改行コード\r\nを削除するので"Liberty Fish "となりそうだが、chopは非破壊メソッドなので改行コードが残る
+
+File.open('testfile.txt', 'a') do |f|
+  f.write("recode 1\n")
+  f.seek(0, IO::SEEK_SET)
+  f.write("recode 2\n")
+end
+
+def foo(n)
+  n ** n
+end
+puts foo(2) * 2 #2*2*2=8
+
