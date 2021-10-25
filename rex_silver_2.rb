@@ -165,3 +165,69 @@ while not io.eof?
   io.seek(0, IO::SEEK_CUR)
   p io.readlines
 end #readlinesで最後のlineまできて、現在位置から0バイト移動し、ふたたびreadlinesする。最後のlineなので、[]
+
+hash = {price: 100, order_code: 200, order_date: "2018/09/20", tax: 0.8}
+p hash.values_at(:price, :tax)
+
+x = 1
+y = 1.0
+print x == y #値が等しい true
+print x.eql? y #値は等しいが型が異なる false
+print x.equal? y #object_idが異なる false
+print x.equal?(1) #定数Integerはobject_idが同じ true
+
+a1 = "abc"
+a2 = 'abc'
+print a1.equal? a2 #object_idがことなる false
+print a1 == a2 #値が同じ true
+
+class Foo
+  @@foo = 0
+
+  def foo
+    @@foo
+  end
+
+  def foo=(value)
+    @@foo = value
+  end
+end
+foo1 = Foo.new
+foo1.foo += 1
+foo2 = Foo.new
+foo2.foo += 2
+puts "#{foo1.foo}/#{foo2.foo}" #クラス変数はインスタンス間で共有されるため、3/3
+
+a = [1, 2, 3, 4, 5]
+b = [2, 4, 6]
+p (a - b).map(&:next) #[2,4,6]
+
+str = "abcdefgh"
+puts str[4..6] == str[-4...7]
+
+arr = [
+  "a".to_i(36), #36進数のa、10
+  "070".to_i(0), #8進数の070, 56
+  nil.to_i, #nilにto_iすると0
+  "0b0001".to_i #先頭に数値のない文字列にto_iしたので0
+]
+p arr
+'1a'.to_i #先頭に数値のある文字列にto_iしたので数値の1だけが出力される
+
+a1 = [1,2,3]
+a2 = [4,2,3]
+p a1 || a2 #a1がtrueなので[1,2,3]
+
+hash = { a: 100, b: 200, c: 300, a: 150, c: 250 }
+p hash #おなじkeyだと後続の値が設定されるので{:a=>150, :b=>200, :c=>250}
+
+x, y, z = 1, [2, 3]
+p z #[2,3]は括られているのでyに入る。zはnil
+
+puts '7'.binary #no method erro
+puts '80' #80
+puts 0xFF #(15*16) + 15 =255
+puts 7.to_s(3) #3進数で7を表現すると21
+
+puts "Ruby-Examination"[5] #文字列のindex番目を指すのでE
+
