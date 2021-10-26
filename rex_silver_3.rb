@@ -127,3 +127,97 @@ str = <<EOS
     #{1 + 1}
 EOS
 puts str #EOSはダブルクォートと同じ。式展開は行われる。スペースも改行も正しく表記される。
+
+chars = "I love apple, banana and grape"
+5.times do
+  chars = chars.sub("a", "@") # 先頭から検索し、aを@に置換
+end
+p chars #"I love @pple, b@n@n@ @nd grape"
+
+CONST = "REx"
+def foo
+  CONST
+end
+puts foo #REx
+
+a1 = [1,2,3]
+a2 = [4,2,3]
+p a1 && a2 #[4,2,3]
+
+a1 = "abc"
+a2 = 'abc'
+print a1.equal? a2 #false
+print a1 == a2 #true
+
+hash = Hash.new {|h, k| raise(KeyError, "Key #{k} does not exist in hash #{h}") }
+XXXX
+
+a = [1, 2, 3, 4, 5]
+a.each { |n| puts n }
+
+(x, y), z = 1, 2, 3
+p z #2
+
+("a".."d").each_with_index do |v, i|
+  puts "#{i} / #{v}"
+end
+=begin
+0 / a
+1 / b
+2 / c
+3 / d
+=end
+
+p "Apple-Banana-Lemon".split /(-)/ #括弧の-も分割される。["Apple", "-", "Banana", "-", "Lemon"]
+
+a1 = [1,2,3]
+a2 = [4,2,3]
+p a1 || a2 #[1,2,3]
+
+v1 = false || 1 + 1 == 1.to_i # false代入でfalseとなり、1+1 == 1.to_iが実行され、falseとなる
+puts v1
+
+klass = Class.new
+hash = {klass => 100}
+puts hash[klass] #100
+
+klass = Class.new
+hash = {}
+hash.store(klass, 100)
+puts hash[klass] #100
+
+klass = Class.new
+hash = Hash[klass, 100]
+puts hash[klass] #100
+
+count = 0
+begin
+  1 / count
+rescue NameError
+  count += 1
+  retry
+rescue NoMethodError
+  count += 2
+  retry
+rescue ZeroDivisionError
+  count += 3
+  retry
+else
+  puts 4
+ensure
+  puts "count: #{count}"
+end
+# 4
+# count: 3
+# zerodivisionerrorでcountが3になり、retryでrescueが実行されずelseが実行される。最後にensureが実行され、count: 3
+
+str = "aaabbcccddd"
+p str.scan("c") #scanは、マッチした文字列を含む配列を返却。[c,c,c]
+
+a = [-1, 2, 3, 4, 5]
+b = (4..6).to_a
+puts a.inject(:+) + b.inject(:+) #9+15 = 24
+puts (a | b).inject(:-).abs + (a & b).inject(:+).abs #21 + 9 = 30
+puts (a | b).inject(:*) + b.inject(0) { |x, y| x + y ** 3 } #-1 * 2*3*4*5*6 = -72 + 4**3 + 5**3 + 6**3 > 30
+????
+
