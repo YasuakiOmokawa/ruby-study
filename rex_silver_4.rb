@@ -53,3 +53,35 @@ a[5] = 10
 a.compact!
 p a #[1,10]
 
+str = "abcdefghijk"
+p str[2...4] #cd
+
+$val = 0
+class Count
+  def self.up
+    $val = $val + 1
+    $val == 3 ? true : false
+  end
+end
+[*1..10].select do
+  Count.up
+end
+p $val #3
+
+a = [1, 2, 5, 7, 8]
+b = [1, 3, 6, 7, 9]
+c =  nil || a & b | a && a | b # [1,7] | [1,2,5,7,8] | [1,3,6,7,9] = [1,2,3,5,6,7,8,9]
+p c
+
+
+p [1,2,3,4,5].partition(&:odd?) == [1,2,3,4,5].partition { |value| value.odd? }
+
+arr = ["c", 2, "a", 3, 1, "b"]
+arr.sort # stringと数値はソートできない
+
+a = [1, 2, 3, 5, 8]
+b = [1, 3, 6, 7, 8]
+c = false || true ? true && false ? a | b : a & b : b ;
+p c #[1,3,8]
+
+0.upto(5).select(&:odd?) #[1,3,5]
