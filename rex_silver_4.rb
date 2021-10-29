@@ -85,3 +85,40 @@ c = false || true ? true && false ? a | b : a & b : b ;
 p c #[1,3,8]
 
 0.upto(5).select(&:odd?) #[1,3,5]
+
+hoge = 0
+def hoge
+  x = 0
+  5.times do |i|
+    x += 1
+  end
+  x
+end
+puts hoge #変数のほうが先に探索されるので0
+
+def hoge(n)
+  unless n != 3
+    "hello"
+  elsif n == 5 #unless にelsifは使えない。error
+    "world"
+  end
+end
+str = ''
+str.concat hoge(3)
+str.concat hoge(5)
+puts str
+
+$val = 0
+class Count
+  def self.up
+    $val = $val + 1
+    $val == 3 ? true : false
+  end
+end
+#selectは、ブロックのtrue/falseに関わらずレシーバオブジェクトをすべて走査するので、10
+#これが仮に#any?だったら、falseになったらレシーバオブジェクトの走査が終了するため、3
+[*1..10].select? do
+  Count.up
+end
+p $val
+
