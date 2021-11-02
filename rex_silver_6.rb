@@ -71,3 +71,27 @@ hoge
 
 str = "1;2;3;4"
 p str.split(";")
+
+arr = [
+  true.equal?(true), #true 1
+  nil.eql?(NilClass), #false 2
+  String.new.equal?(String.new), #false 2
+  1.equal?(1) #true 1
+]
+p arr.collect { |a| a ? 1 : 2 }.inject(:+) #6
+
+x = %(a b)
+y = %W(c d)
+z = y << x
+p z
+
+IO.read("text.txt", 3, offset = 1) #2行目から3行取得と予想 -> 2バイト目から3バイト取得 Ex\n
+
+v1 = false || 1 + 1 == 1.to_i #1+1が先に算出されると予想 false -> ○ 算出演算子のほうが優先度が高い
+puts v1
+
+
+arr = [["apple"],["banana"],["orange"]].flatten
+arr.each do |i|
+  puts i
+end
