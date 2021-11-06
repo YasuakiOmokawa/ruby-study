@@ -63,3 +63,48 @@ movie = Movie.new(1)
 movie.title = '博士の異常な愛情'
 movie.director = 'キューブリック'
 
+3.times do
+  class C
+    puts 'Hello'
+  end
+end
+
+class D
+  def x; 'x'; end
+end
+class D
+  def y; 'y'; end
+end
+d = D.new
+d.x #x
+d.y #y
+
+class MyClass
+  def my_method
+    @v = 1
+  end
+end
+
+obj = MyClass.new
+obj.class           # => MyClass
+# クラス定義しているので混乱しがちだけど、クラスは実際にはオブジェクトなんだそうな。
+# だから、クラス.class という文法が成り立つ。
+# オブジェクトなので、クラスにもclassがある。それがClassのこと。
+p MyClass.class #Class
+p MyClass.superclass #Object
+
+obj.my_method
+obj.instance_variables
+obj.methods.grep /^my/
+
+p String.instance_methods == 'abc'.methods #true
+p String.methods == 'abc'.methods #false
+
+'hello'.class.class
+Class.instance_methods(false)
+
+p Array.superclass
+p Object.superclass
+p BasicObject.superclass
+
+p Class.superclass
