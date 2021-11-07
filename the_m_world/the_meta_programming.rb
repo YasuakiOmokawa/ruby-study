@@ -84,6 +84,7 @@ class MyClass
     @v = 1
   end
 end
+my_class = MyClass
 
 obj = MyClass.new
 obj.class           # => MyClass
@@ -108,3 +109,59 @@ p Object.superclass
 p BasicObject.superclass
 
 p Class.superclass
+
+bargain_price = Monetize.from_numeric(99, "USD")
+I18n.enforce_available_locales = false
+bargain_price.format # => "$99.00"
+
+class Object
+  def object_extend
+    p 'hoge'
+  end
+end
+12345.object_extend #hoge
+
+module MyModule
+  MyConstant = '外側の定数'
+
+  class MyClass
+    MyConstant = '内側の定数'
+  end
+end
+p MyModule::MyConstant #sotogawa
+p MyModule::MyClass::MyConstant #uchigawa
+
+p MyModule.constants #[:myconstant, :myclass]
+p Module.constants.include? :Object #true
+p Module.constants.include? :Module #true
+
+module M
+  class C
+    module M2
+      Module.nesting #[M::C::M2, M::C, M] モジュールのパスが順繰りに出力される
+    end
+  end
+end
+
+class C
+  def hoge
+    'fuga'
+  end
+end
+c = C.new # object of C. contain instance variables and link to C
+C # object(instance of "Class" class). contain instance methods in itself and link to superclass
+# Classのインスタンスが生成されるタイミングはいつ？ class Cしたタイミング？
+# オブジェクトとは、インスタンス変数の集まりにクラスへのリンクがついたもの
+p C.methods & Class.instance_methods(false) # [:allocate, :superclass, :new, :json_creatable?]
+p C.instance_methods(false) # [:hoge]
+C = 'hoge'
+
+class C
+  def hoge
+    'fuga'
+  end
+end
+id1 = C.object_id
+C = 'hoge' #Cクラスへの参照が外れる
+p id1 == C.object_id #false
+
