@@ -165,3 +165,34 @@ id1 = C.object_id
 C = 'hoge' #Cクラスへの参照が外れる
 p id1 == C.object_id #false
 
+
+p Object.class #Class
+p Module.superclass #Object
+p Class.class #Class
+
+# method search
+class MyClass
+  def my_method; 'my_method()'; end
+end
+class MySubClass < MyClass; end
+obj = MySubClass.new
+p obj.my_method #my_method()
+p MySubClass.ancestors #[:MySubClass, :MyClass, :Object, :Kernel, :BasicObject]
+
+module M1
+  def my_method
+    'M1#my_method()'
+  end
+end
+class C
+  include M1
+end
+class D < C; end
+p D.ancestors # => [D, C, M1, Object, Kernel, BasicObject]
+
+class C2
+  prepend M1
+end
+class D2 < C2; end
+p D2.ancestors # => [D2, M1, C2, Object, Kernel, BasicObject]
+
