@@ -17,6 +17,10 @@ GEM
     i18n (1.8.10)
       concurrent-ruby (~> 1.0)
     minitest (5.14.4)
+    monetize (1.11.0)
+      money (~> 6.12)
+    money (6.16.0)
+      i18n (>= 0.6.4, <= 2)
     sqlite3 (1.4.2)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
@@ -28,6 +32,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord
   benchmark-ips
+  monetize
   sqlite3
 
 BUNDLED WITH
