@@ -12,6 +12,7 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
       zeitwerk (~> 2.3)
+    awesome_print (1.9.2)
     benchmark-ips (2.9.1)
     concurrent-ruby (1.1.9)
     i18n (1.8.10)
@@ -31,6 +32,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord
+  awesome_print
   benchmark-ips
   monetize
   sqlite3

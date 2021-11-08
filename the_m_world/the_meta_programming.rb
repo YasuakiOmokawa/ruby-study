@@ -196,3 +196,47 @@ end
 class D2 < C2; end
 p D2.ancestors # => [D2, M1, C2, Object, Kernel, BasicObject]
 
+module M1; end
+module M2
+  include M1
+end
+module M3
+  prepend M1
+  include M2
+end
+p M3.ancestors # => [M1, M3, M2] モジュールは初回の読み込みのみ有効化する。M2のinclude M1は2回目の読み込みなので無視される
+
+# Kernelメソッドを定義するとどこからでも呼べる。KernelはObjectにインクルードされているため
+module Kernel
+  private
+
+  def printstar
+    'hoge'
+  end
+end
+p Kernel.private_instance_methods.grep /^pr/ #[:proc, :print, :printf, :printstar]
+
+local_time = {:city => "Rome", :now => Time.now }
+ap local_time, :indent => 2
+
+class MyClass
+  def testing_self
+    @var = 10     # selfのインスタンス変数
+    my_method     # self.my_methodと同じ
+    self
+  end
+
+  def my_method
+    @var = @var + 1
+  end
+end
+obj = MyClass.new
+p obj.testing_self  # => #<MyClass:0x007f93ab08a728 @var=11>
+
+class MyClass
+  def self.tools
+    'tools'
+  end
+end
+p MyClass.tools #tools
+
