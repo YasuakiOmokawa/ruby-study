@@ -240,3 +240,16 @@ class MyClass
 end
 p MyClass.tools #tools
 
+class C
+  def public_method
+    self.private_method
+  end
+
+  private
+
+  def private_method
+    'hoge'
+  end
+end
+p C.new.public_method #ruby2.7より、self付きなら呼べるようになった
+p C.new.private_method #error
