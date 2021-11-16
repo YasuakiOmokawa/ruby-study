@@ -253,3 +253,64 @@ class C
 end
 p C.new.public_method #ruby2.7より、self付きなら呼べるようになった
 p C.new.private_method #error
+
+module StringExtensions
+  refine String do
+    def to_alphanumeric
+      gsub(/[^\w\s]/, '')
+    end
+  end
+end
+"a".to_alphanumeric #error
+using StringExtensions
+"a".to_alphanumeric #not error
+
+class MyClass
+  def my_method
+    "original my_method"
+  end
+
+  def another_method
+    my_method
+  end
+end
+module MyClassRefinements
+  refine MyClass do
+    def my_method
+      "refined my_method"
+    end
+  end
+end
+MyClass.new.my_method #org
+using MyClassRefinements
+MyClass.new.my_method #ref
+MyClass.new.another_method #refじゃなくてorgのほうがよばれる！wow
+
+module Printable
+  def print
+    p 'printable print'
+  end
+
+  def prepare_cover
+    # ...
+  end
+end
+module Document
+  def print_to_screen
+    prepare_cover
+    format_for_screen
+    print
+  end
+
+  def format_for_screen
+  end
+
+  def print
+    p 'document print'
+  end
+end
+class Book
+  include Printable
+  include Document
+end
+Book.new.print_to_screen #document print
