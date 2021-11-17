@@ -492,3 +492,59 @@ puts number_of.frank
 
 im = BasicObject.instance_methods
 p im
+
+def a_block
+  return yield if block_given?
+  'block is missing'
+end
+p a_block #block is missing
+p a_block {'hoge'} #hoge
+
+# ブロックを呼び出すと、呼び出し元の変数の紐付け情報が渡される
+def my_method
+  x = 'Goodbye'
+  yield('omokawa')
+end
+x = 'Hello'
+my_method {|y| "#{x} #{y} world."} #Hello omokawa world.
+
+def just_yield
+  yield
+end
+top_level_variable = 1
+just_yield do
+  top_level_variable += 1
+  local_to_block = 1 # new binding
+end
+p top_level_variable #2
+p local_to_block #error
+
+v1 = 1
+class MyClass
+  v2 = 2
+  p local_variables #[:v2]
+  def my_method
+    v3 = 3
+    p local_variables
+  end
+  p local_variables #[:2]
+end
+o = MyClass.new
+p o.my_method #[:v3]
+p o.my_method #[:v3]
+local_variables #[:v1, :o]
+
+class MyClass
+  def initialize
+    @v = 1
+  end
+end
+obj = MyClass.new
+obj.instance_eval do
+  p self
+  p @v
+end
+v = 2
+obj.instance_eval {@v = v}
+p obj.instance_eval {@v} #インスタンス変数のスコープが見える
+
