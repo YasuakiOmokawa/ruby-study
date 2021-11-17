@@ -434,3 +434,61 @@ end
 c = Computer.new(1, DS.new)
 ls c
 c.send(:method_missing, :my_method)
+
+# 動的プロキシ
+class DS
+  def get_cpu_info(id)
+    'CPU hoge'
+  end
+  def get_cpu_price(id)
+    100
+  end
+
+  def get_mouse_info(id)
+    99
+  end
+
+  def get_keyboard_info(id)
+    101
+  end
+end
+class Computer < BasicObject
+  def initialize(computer_id, data_source)
+    @id = computer_id
+    @data_source = data_source
+  end
+
+  def method_missing(name)
+    super if !@data_source.respond_to?("get_#{name}_info")
+    info = @data_source.send("get_#{name}_info", @id)
+    price = @data_source.send("get_#{name}_price", @id)
+    result = "#{name.capitalize}: #{info} ($#{price})"
+    return "* #{result}" if price >= 100
+    result
+  end
+end
+c = Computer.new(1, DS.new)
+p c.cpu
+p c.hoge
+p c.respond_to?(:mouse) #true
+p c.respond_to?(:fuga) #false
+
+class Roulette
+  def method_missing(name, *args)
+    person = name.to_s.capitalize
+    super unless %w[Bob Frank Bill].include? person
+    number = 0
+    3.times do
+      number = rand(10) + 1
+      puts "#{number}..."
+    end
+    "#{person} got a #{number}"
+  end
+end
+# Rouletteは以下のように使う。
+number_of = Roulette.new
+puts number_of.bob
+puts number_of.frank
+
+im = BasicObject.instance_methods
+p im
