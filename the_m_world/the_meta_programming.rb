@@ -598,3 +598,18 @@ my_proc = proc {'Bill'}
 p my_method('Hello', &my_proc) #Hello, Bill
 p my_method('Hello', my_proc) #wrong number of argument
 
+def double(callable_object)
+  callable_object.call * 2
+end
+l = lambda { return 10 }
+p = proc { return 10 }
+[l, p].each do |obj|
+  p "#{obj} -> #{obj.lambda?}"
+end
+p double(l) # => 20
+def another_double
+  p = Proc.new {return 10}
+  res = p.call
+  res += 10 # not exec this code
+end
+p another_double #10
