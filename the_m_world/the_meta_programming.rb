@@ -548,3 +548,53 @@ v = 2
 obj.instance_eval {@v = v}
 p obj.instance_eval {@v} #インスタンス変数のスコープが見える
 
+dec = lambda { |x| x - 1 }
+m = ->(x) { x + 1 }
+l = Proc.new { |x| x + 1 }
+[dec, m, l].each do |block|
+  p block.class #Proc
+end
+p dec.call(2) #1
+p l.call(2) #3
+p m.call(3) #4
+
+def math(a, b)
+  yield(a, b)
+end
+def do_math(a, b, &operation)
+  math(a, b, &operation)
+end
+p do_math(2, 3) {|x, y| x * y}  # => 6
+p do_math(2, 3) {|x, y| x + y}  # => 5
+p do_math(2, 3) {|x, y| x - y}  # => -1
+
+def my_method(&the_proc)
+  the_proc
+end
+pr = my_method {|name| "Hello, #{name}!" }
+p pr.class         # => Proc
+p pr.call("Bill")  # => "Hello, Bill!"
+def m_method(block)
+  block
+end
+b = m_method {|name| "Hello, #{name}!" }
+p b.class         # => NilClass
+p b.call("Bill")  # => undef call method
+def mr_method
+  yield
+end
+bl = mr_method {|name| "Hello, #{name}!" }
+p bl.class         # => String
+def ms_method(a)
+  yield(a)
+end
+a = ms_method('hoge') {|name| "Hello, #{name}!" }
+p a.class         # => String
+
+def my_method(greeting)
+  "#{greeting}, #{yield}"
+end
+my_proc = proc {'Bill'}
+p my_method('Hello', &my_proc) #Hello, Bill
+p my_method('Hello', my_proc) #wrong number of argument
+
