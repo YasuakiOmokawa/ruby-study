@@ -613,3 +613,37 @@ def another_double
   res += 10 # not exec this code
 end
 p another_double #10
+
+p = Proc.new {|a,b| [a,b]}
+p p.call(1) #[1,nil]
+p p.call #[nil,nil]
+p p.call(1,2,3) #[1,2]
+l = ->(a,b) { [a,b] }
+p l.call(1) #argument error
+p l.call(1,2) #[1,2]
+p l.call(1,2,3) #arg error
+
+class MyClass
+  def initialize(x)
+    @x = x
+  end
+
+  def my_method
+    @x
+  end
+end
+obj = MyClass.new(1)
+p obj.my_method #1
+m2 = obj.method :my_method
+p m2.call #1
+
+module MyModule
+  def my_method
+    42
+  end
+end
+unbound = MyModule.instance_method(:my_method)
+p unbound.class #UnboundMethod
+String.send :define_method, :another_method, unbound
+p 'abc'.another_method #42
+
