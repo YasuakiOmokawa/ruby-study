@@ -85,15 +85,5 @@ obj.write
 p obj.read            # => 2
 p MyClass.read        # => 1
 
-class Loan
-  def initialize(book)
-    @book = book
-    @time = Time.now
-  end
-
-  def to_s
-    "#{@book.upcase} loaned on #{@time}"
-  end
-end
 loan = Loan.new('book1')
 p loan.to_s
