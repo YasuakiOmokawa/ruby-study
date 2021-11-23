@@ -34,3 +34,66 @@ each_event do |event|
   end
   puts "ALERT: #{event[:description]}" if env.instance_eval &(event[:condition])
 end
+
+class MyClass
+  puts 'Hello'
+end
+result = class MyClass
+  self
+end
+result
+
+class C
+  def m1
+    def m2;end
+  end
+end
+class D < C;end
+obj = D.new
+p C.instance_methods(false) #[:m1]
+obj.m1
+p C.instance_methods(false) #[:m1, :m2]
+
+def add_method_to(a_class)
+  a_class.class_eval do
+    def m; 'Hello!';end
+  end
+end
+add_method_to String
+'abc'.m #Hello!
+class C1
+  def x
+    1
+  end
+end
+c1 = C1.new
+c1.hoge #nomethod error
+c1.instance_eval do
+  def hoge; x; end
+end
+p c1.hoge #1
+
+class MyClass
+  @my_var = 1
+  def self.read; @my_var; end
+  def write; @my_var = 2; end
+  def read; @my_var; end
+end
+obj = MyClass.new
+p obj.read            # => nil
+obj.write
+p obj.read            # => 2
+p MyClass.read        # => 1
+
+class Loan
+  def initialize(book)
+    @book = book
+    @time = Time.now
+  end
+
+  def to_s
+    "#{@book.upcase} loaned on #{@time}"
+  end
+end
+loan = Loan.new('book1')
+p loan.to_s
