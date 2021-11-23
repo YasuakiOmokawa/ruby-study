@@ -87,3 +87,18 @@ p MyClass.read        # => 1
 
 loan = Loan.new('book1')
 p loan.to_s
+
+# classキーワードを使わずにクラスを書くには？
+class MyClass < Array
+  def my_method
+    'Hello!'
+  end
+end
+MyClass2 = Class.new(Array) do
+  def my_method
+    'Hello!'
+  end
+end
+m = MyClass.new
+m2 = MyClass2.new
+p m.append(m.my_method).eql? m2.append(m2.my_method) #true
