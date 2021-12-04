@@ -164,3 +164,100 @@ p D.singleton_class ##D
 p D.singleton_class.superclass ##C
 p C.singleton_class.superclass ##Object
 p D.a_class_method #C.a_class_method()
+class MyClass
+  def self.another_method;end
+end
+def MyClass.a_method;end
+class MyClass
+  class << self #特異クラスをオープンしている
+    def yet_method;end
+  end
+end
+
+s1,s2 = 'abc','def'
+s1.instance_eval do
+  def swooish!; reverse ;end
+end
+p s1.swooish! #cba
+p s2.respond_to?(:swooish!) #false
+
+class MC
+  attr_accessor :a
+end
+obj = MC.new
+obj.a = 2
+obj.a #2
+
+class MC2
+  class << self
+    attr_accessor :c
+  end
+end
+MC2.c = 'It works!'
+p MC2.c #It works!
+
+module MyModule
+  def a_method;'hello';end
+end
+class MyClass3
+  class << self
+    include MyModule
+  end
+end
+p MyClass3.a_method #Hello
+obj = Object.new
+obj.extend MyModule
+p obj.a_method #hello
+class MyClass4
+  extend MyModule
+end
+p MyClass4.a_method #hello
+
+class String
+  alias_method :real_length, :length
+
+  def length
+    real_length > 5 ? 'long' : 'short'
+  end
+end
+p 'war and piece'.length # long
+p 'war and piece'.real_length #13
+
+module StringRefinements
+  refine String do
+    def length
+      super > 5 ? 'long' : 'short'
+    end
+  end
+end
+using StringRefinements
+p 'war and piece'.length #long
+
+module ExplicitString
+  def length
+    super > 5 ? 'long' : 'short'
+  end
+end
+String.class_eval do
+  prepend ExplicitString
+end
+p "War and Peace".length      # => long
+
+module PrependFixnum
+  def +(value)
+    self + 1
+  end
+end
+Fixnum.class_eval do
+  prepend PrependFixnum
+end
+1 + 2 #2
+
+class Fixnum
+  alias_method :old_plus, :+
+
+  def +(value)
+    self.old_plus(value) + old_plus(1)
+  end
+end
+1 + 1 #3
