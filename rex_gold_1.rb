@@ -127,3 +127,166 @@ class B < A
   end
 end
 p B.new.hoge
+
+class C
+  class << C
+    def hoge
+      'Hi'
+    end
+  end
+
+  def hoge
+    'Goodbye'
+  end
+end
+p C.new.hoge #Goodbye
+
+class S
+  @@val = 0
+  def initialize
+    @@val += 1
+  end
+end
+class C < S
+  class << C
+    @@val += 1
+  end
+
+  def initialize
+  end
+end
+C.new
+C.new
+S.new
+S.new
+p C.class_variable_get(:@@val) #2
+
+class C
+  def initialize
+    p self.class
+  end
+end
+class C2 < C
+end
+C2.new #C2
+
+module M1
+end
+module M2
+end
+class C
+  include M1
+  include M2
+end
+p C.ancestors
+
+val = 1 + 1/2r
+puts val.class #Rational
+
+def m1(*args)
+  p args
+  str = yield if block_given?
+  p "m1 #{str}"
+end
+def m2(*args)
+  p args
+  str = yield if block_given?
+  p "m2 #{str}"
+end
+m1 m2 do
+  "hello"
+end
+def m3(*)
+end
+def m4
+  p 'hoge'
+end
+
+module M
+  def class_m
+    "class_m"
+  end
+end
+class C
+  extend M
+end
+p C.methods.include? :class_m #true
+
+module M
+  def method_missing(id, *args)
+    puts "M#method_missing"
+  end
+end
+class A
+  include M
+  def method_missing(id, *args)
+    puts "A#method_missing"
+  end
+end
+class B < A
+  class << self
+    def method_missing(id, *args)
+      puts "B.method_missing"
+    end
+  end
+end
+B.new.dummy_method #A#method_missing
+
+class Human
+  NAME = "Unknown"
+
+  def self.name
+    const_get(:NAME)
+  end
+end
+class Fukuzawa < Human
+  NAME = "Yukichi"
+end
+puts Fukuzawa.name #Yukichi
+class Mishima < Fukuzawa
+  NAME = 'Yukio'
+end
+puts Mishima.name
+
+module M1
+end
+module M2
+end
+class C
+  include M1, M2
+end
+p C.ancestors
+
+class C1
+  NAME = 'hoge'
+end
+class C1
+  def self.name
+    NAME
+  end
+end
+p C1.name #hoge
+
+module M
+  CONST = "Hello, world"
+end
+class << M
+  def say
+    const_get(:CONST)
+  end
+end
+p M::say #Hello, world
+
+module M
+  CONST = "Hello, world"
+end
+class << M
+  def say
+    CONST
+  end
+end
+p M::say #error
+
+p [1,2,3,4].map(&self.method(:*)) #error
+p self.method(:puts)
+p [1,2,3,4].map(&self.method(:puts)) #[nil,nil,nil,nil]
