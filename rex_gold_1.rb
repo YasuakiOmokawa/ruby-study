@@ -290,3 +290,67 @@ p M::say #error
 p [1,2,3,4].map(&self.method(:*)) #error
 p self.method(:puts)
 p [1,2,3,4].map(&self.method(:puts)) #[nil,nil,nil,nil]
+
+module A
+  B = 42
+
+  def f
+    21
+  end
+end
+A.module_eval(<<-CODE)
+  def self.f
+    p B
+  end
+CODE
+B = 15
+A.f #42
+
+def foo(arg1:100, arg2:200)
+  puts arg1
+  puts arg2
+end
+option = {arg2: 900}
+foo arg1: 200, **option # 200 900
+
+class Base
+  CONST = "Hello, world"
+end
+class C < Base
+end
+module P
+  CONST = "Good, night"
+end
+class Base
+  prepend P
+end
+module M
+  class C
+    CONST = "Good, evening"
+  end
+end
+module M
+  class ::C
+    def greet
+      CONST
+    end
+  end
+end
+p C.new.greet
+
+class C3
+  CONST = 'c3'
+end
+class C2 < C3
+  def const
+    CONST
+  end
+end
+p C2.new.const
+module M2
+  CONST = 'm2'
+end
+class C3
+  prepend M2
+end
+p C2.new.const
