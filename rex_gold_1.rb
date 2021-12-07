@@ -354,3 +354,88 @@ class C3
   prepend M2
 end
 p C2.new.const
+
+module M3
+  CONST = 'm3'
+end
+class C4
+  prepend M3
+
+  def say
+    CONST
+  end
+end
+C4.new.say #レキシカルスコープに入った？
+
+module M2
+  CONST = 'm2'
+end
+class C3
+  # CONST = 'c3'
+end
+class C2 < C3
+  def const
+    CONST
+  end
+end
+class C3
+  prepend M2
+end
+p C2.new.const #m2 moduleのprependにより、無名クラスを参照しようとする
+
+m = Module.new
+CONST = "Constant in Toplevel"
+_proc = Proc.new do
+  CONST = "Constant in Proc"
+end
+m.module_eval(<<-EOS)
+  CONST = "Constant in Module instance"
+
+  def const
+    CONST
+  end
+EOS
+m.module_eval(&_proc)
+p m.const #Constant in Module instance
+c = Class.new.include(m)
+c.new.const
+
+def hoge(*args, &block)
+  p "args-hoge is #{args}"
+  block.call(args)
+end
+hoge(1,2,3,4) do |*args|
+  p "args-block is #{args}"
+  p args.length < 0 ? "hello" : args
+end
+
+module M
+  def foo
+    super
+    puts "M#foo"
+  end
+end
+class C2
+  def foo
+    puts "C2#foo"
+  end
+end
+class C < C2
+  def foo
+    super
+    puts "C#foo"
+  end
+  include M
+end
+C.new.foo
+
+mod = Module.new
+mod.module_eval do
+  EVAL_CONST = 100
+end
+puts "EVAL_CONST is defined? #{mod.const_defined?(:EVAL_CONST)}"
+puts "EVAL_CONST is defined? #{Object.const_defined?(:EVAL_CONST)}"
+
+v1 = 1 / 2 == 0
+v2 = !!v1 or raise RuntimeError
+puts v2 and false
