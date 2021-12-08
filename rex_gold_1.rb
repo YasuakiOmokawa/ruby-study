@@ -439,3 +439,11 @@ puts "EVAL_CONST is defined? #{Object.const_defined?(:EVAL_CONST)}"
 v1 = 1 / 2 == 0
 v2 = !!v1 or raise RuntimeError
 puts v2 and false
+
+def foo(n)
+  n ** n
+end
+foo = Proc.new { |n|
+  n * 3
+}
+puts foo[2] * 2
