@@ -447,3 +447,78 @@ foo = Proc.new { |n|
   n * 3
 }
 puts foo[2] * 2
+
+module M
+  @@val = 75
+  class Parent
+    @@val = 100
+  end
+  class Child < Parent
+    @@val += 50
+  end
+
+  # if Child < Parent
+  if 100 > 10
+    @@val += 25
+  else
+    @@val += 30
+  end
+
+  def self.hoge
+    if Child < Parent
+      # if true
+        @@val += 25
+      else
+        @@val += 30
+      end
+  end
+end
+p M::Child.class_variable_get(:@@val)
+
+def bar(&block)
+  # block.call
+  block.yield
+end
+bar do
+  puts "hello, world"
+end
+proc = Proc.new { 'this is proc' }
+proc.call
+proc.yield
+proc[]
+proc.()
+
+class C;end
+class K < C
+  def hoge(value)
+    super value
+  end
+end
+K.new.hoge 100 #100
+
+class C
+end
+module M
+  refine C do
+    def m1(value)
+      super value - 100
+    end
+  end
+end
+class C
+  def m1(value)
+    value - 100
+  end
+end
+puts C.new.m1 400 #300
+using M
+class K < C
+  def m1(value)
+    super value - 100
+  end
+end
+puts K.new.m1 400 #100 refine + superは、refineでオーバーライドされたメソッドを呼び出す
+
+p "Matz is my tEacher".scan(/[is|my]/).length #4
+p "Matz is my tEacher".scan(/is/)
+p "Matz is my tEacher".scan(/[is]/)
