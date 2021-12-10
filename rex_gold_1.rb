@@ -522,3 +522,25 @@ puts K.new.m1 400 #100 refine + superは、refineでオーバーライドされ�
 p "Matz is my tEacher".scan(/[is|my]/).length #4
 p "Matz is my tEacher".scan(/is/)
 p "Matz is my tEacher".scan(/[is]/)
+
+val = 0
+class B
+end
+class C < B
+end
+if C < BasicObject
+  val += 100
+else
+  val += 15
+end
+if B < C
+  val += 100
+else
+  val += 15
+end
+p val
+
+class C
+end
+p C.singleton_class.singleton_class.singleton_class.singleton_class
+
