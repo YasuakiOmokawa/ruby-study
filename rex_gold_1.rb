@@ -598,3 +598,71 @@ f.resume()
 f.resume(:foo)
 f.resume()
 p a  #=> :foo
+
+class Base
+  def name
+    p 'Base#name'
+  end
+end
+
+module Scope
+  class Base
+    def name
+      p 'Scope::Base#name'
+    end
+  end
+  class Inherited < Base
+    def name
+      p 'Scope::Inherited#name'
+      super
+    end
+  end
+end
+inherited = Scope::Inherited.new
+inherited.name
+
+module M
+  def hoge
+    __method__
+  end
+end
+class C
+  include M
+end
+module M2
+  def m2
+    'm2'
+  end
+end
+module M
+  include M2
+end
+p C.new.hoge
+p C.new.m2
+
+module M1
+  def method_1
+    __method__
+  end
+end
+class C
+  include M1
+end
+p C.new.method_1
+module M2
+  def method_2
+    __method__
+  end
+end
+module M1
+  include M2
+end
+p C.new.method_2
+
+p "Matz is my tEacher"[/[J-P]\w+[^ ]/]
+
+def foo(a)
+  a + yield
+end
+puts foo("Ruby") { "Examination" }
+
