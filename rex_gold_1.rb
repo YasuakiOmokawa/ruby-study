@@ -666,3 +666,42 @@ def foo(a)
 end
 puts foo("Ruby") { "Examination" }
 
+lazy = (1..100).each.lazy.chunk(&:even?)
+lazy.first(5)
+lazy.take(5).force
+
+def m1(*)
+  str = yield if block_given?
+  p "m1 #{str}"
+end
+def m2(*)
+  str = yield if block_given?
+  p "m2 #{str}"
+end
+m1 m2 do
+  "hello"
+end
+m1 m2 {
+  "hello"
+}
+
+
+class C
+  def self.m1
+    200
+  end
+end
+
+module R
+  refine C.singleton_class do
+    def m1
+      100
+    end
+  end
+end
+
+using R
+
+puts C.m1
+
+
