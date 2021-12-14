@@ -705,3 +705,75 @@ using R
 puts C.m1
 
 
+class Human
+  NAME = "Unknown"
+end
+class Fukuzawa < Human
+  # NAME = "Yukichi"
+  def self.name
+    const_get(:NAME)
+  end
+end
+puts Fukuzawa.name
+
+
+module A
+  B = 42
+
+  def f
+    21
+  end
+end
+
+A.module_eval do
+  p Module.nesting
+  def self.f
+    p B
+  end
+end
+
+B = 15
+
+A.f
+
+
+def foo(arg1:100, arg2:200)
+  puts arg1
+  puts arg2
+end
+
+option = {arg2: 900}
+
+foo(arg1: 200, {arg2: 900})
+
+
+class Base
+  CONST = "Hello, world"
+end
+
+class C < Base
+end
+
+module P
+  CONST = "Good, night"
+end
+
+class Base
+  prepend P
+end
+
+module M
+  class C
+    CONST = "Good, evening"
+  end
+end
+
+module M
+  class ::C
+    def greet
+      Object.const_get(:CONST)
+    end
+  end
+end
+
+p C.new.greet
