@@ -777,3 +777,44 @@ module M
 end
 
 p C.new.greet
+
+
+m = Module.new
+
+CONST = "Constant in Toplevel"
+
+_proc = Proc.new do
+  CONST = "Constant in Proc"
+  def proc2
+    CONST
+  end
+  module_function :proc2
+end
+
+m.module_eval(<<-EOS)
+  CONST = "Constant in Module instance"
+
+  def const
+    CONST
+  end
+EOS
+
+m.module_eval(&_proc)
+p m.proc2
+p m.const
+
+m.module_eval do
+  def fuga
+    'fuga'
+  end
+  module_function :fuga
+end
+p m.fuga
+
+m.instance_eval do
+  CONST2 = 'HOGE'
+  def hoge
+    CONST2
+  end
+end
+p m.hoge
