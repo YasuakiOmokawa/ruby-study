@@ -818,3 +818,230 @@ m.instance_eval do
   end
 end
 p m.hoge
+
+
+module SuperMod
+  p Module.nesting
+end
+
+module Mod
+  module Base
+    p Module.nesting
+  end
+end
+
+module Mod::Base
+  p Module.nesting
+end
+
+A = "top level"
+module XML
+  A = "module level"
+  class SAXParser
+    puts A # module level
+
+    def self.a
+      "defined in a class in a module"
+      puts A
+    end
+  end
+end
+
+class XML::SAXParser
+  puts A # top level
+  puts a # defined in a class in a module
+end
+p XML::SAXParser.a
+p XML::SAXParser::A
+p XML::A
+
+
+module A
+  B = 42
+
+  def f
+    21
+  end
+end
+
+A.module_eval do
+  def self.f
+    p B
+  end
+end
+
+B = 15
+
+A.f
+
+A.module_eval(<<-EOS)
+  def self.b
+    p B
+  end
+EOS
+A.instance_eval do
+  def c
+    p B
+  end
+end
+A.module_eval do
+  def d
+    p B
+  end
+  module_function :d
+end
+A.module_eval(<<-EOS)
+  def e
+    p B
+  end
+  module_function :e
+EOS
+
+module A
+  C = 'CC'
+  module B
+  end
+end
+
+A::B.module_eval do
+  p Module.nesting
+  def self.f
+    C
+  end
+end
+A::B.f
+B.module_eval do
+  p Module.nesting
+  def self.f
+    C
+  end
+end
+
+def fuga(*args, &block)
+  p "function args -> #{args}"
+  block.call(args)
+end
+
+fuga(1,2,3,4) do |**args|
+  p "block called args -> #{args}"
+  p args.length
+  p args.length <= 1 ? "hello" : args
+end
+
+
+v1 = 1 / 2 == 0
+v2 = !!v1 || raise RuntimeError
+puts v2 and false
+puts false or 'hoge'
+
+
+module M
+  p 'set 1'
+  @@val = 1
+  @@val2 = 100
+
+  class Parent
+    p 'set 2'
+    @@val = 2
+  end
+
+  class Child < Parent
+    p 'plus 3'
+    @@val += 3
+  end
+
+  if Child < Parent
+    p 'plus 1'
+    @@val += 1
+  else
+    p 'plus 30'
+    @@val2 += 30
+  end
+
+  class Child2 < Child
+    @@val += 10
+  end
+end
+p M::Child.class_variable_get(:@@val) #15
+p M.class_variable_get(:@@val) #2
+p M::Parent.class_variable_get(:@@val) #15
+p M.class_variable_get(:@@val2) #100
+p M::Child2.class_variable_get(:@@val2) #nameerror
+
+
+class C
+end
+
+class C
+  def m1(value)
+    p 'in C'
+    value - 100
+  end
+end
+
+class K < C
+  def m1(value)
+    p 'in K'
+    super value - 100
+  end
+end
+
+module M
+  refine K do
+    def m1(value)
+      p 'in M::K'
+      super value - 100
+    end
+  end
+end
+
+using M
+
+puts K.new.m1 400
+
+
+class Array
+  def succ_each(step = 1)
+    return to_enum(__method__, step) unless block_given?
+
+    each do |int|
+      yield int + step
+    end
+  end
+end
+
+[97, 98, 99].succ_each.map {|int|
+  p int.chr
+}
+
+[97, 98, 99].succ_each do |i|
+  p "block given #{i + 10}"
+end
+[97, 98, 99].succ_each do |i|
+  p "block jamming #{i + 20}"
+end
+
+peoples = Enumerator.new do |p|
+  p << 'p1'
+  p << 'p2'
+  p << 'p3'
+end
+loop { p(peoples.next) }
+
+arrs = [
+  {p: 'p1',b: 'b1'},
+  {p: 'p2',b: 'b2'},
+  {p: 'p3',b: 'b3'},
+]
+a_b_pairs = Enumerator.new do |y|
+  arrs.each do |arr|
+      y << [arr[:p], arr[:b]]
+  end
+end
+results = a_b_pairs.map.with_index(1) do |(a, b), i|
+  "#{i}: 『#{b}』 #{a}"
+end
+results.each do |result|
+  puts result
+end
+
