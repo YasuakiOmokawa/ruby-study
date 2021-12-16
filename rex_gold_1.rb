@@ -1045,3 +1045,72 @@ results.each do |result|
   puts result
 end
 
+require 'json'
+
+json = <<JSON
+{
+  "price":100,
+  "order_code":200,
+  "order_date":"2018/09/20",
+  "tax":0.8
+}
+JSON
+
+using_parse = JSON.parse json
+p using_parse
+
+using_load = JSON.load json
+p using_load
+
+
+class Base
+  def name
+    p 'Base#name'
+  end
+end
+
+module Scope
+  class Base
+    def name
+      p 'Scope::Base#name'
+    end
+  end
+
+  class Inherited < Base # トップレベルにあるクラスBaseとして解釈される
+    def name
+      p 'Scope::Inherited#name'
+      super
+    end
+  end
+end
+
+inherited = Scope::Inherited.new
+inherited.name
+
+
+module M1
+  def method_1
+    __method__
+  end
+end
+
+class C
+  include M1 # モジュールM2が既に継承関係にある
+end
+
+p C.new.method_1
+p C.ancestors
+
+module M2
+  def method_2
+    __method__
+  end
+end
+
+module M1
+  include M2
+end
+
+p C.ancestors
+p C.new.method_1 # method_1と表示される
+p C.new.method_2 # method_2と表示される
