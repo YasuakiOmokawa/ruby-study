@@ -324,10 +324,50 @@ S.new
 p C.class_variable_get(:@@val)
 
 
-def foo(arg2: 1, arg1: 10)
+def foo(arg3: 1, arg1: 10, **_)
   p arg1
-  p arg2
+  p arg3
 end
 option = {arg2: 900}
-p foo option
 foo **option
+
+
+enum_char = Enumerator.new do |y|
+  "apple".each_char do |chr|
+    y << chr
+  end
+end
+
+array = enum_char.map do |chr|
+  chr.ord
+end
+
+p array
+
+
+class S
+  @@val = 0
+  def initialize
+    @@val += 1
+  end
+end
+
+class C < S
+  class << C
+    @@val += 1
+  end
+end
+
+C.new
+C.new
+S.new
+S.new
+
+p C.class_variable_get(:@@val)
+
+require 'date'
+d = Date.today - Date.new(2015,10,1)
+p d.class
+
+p "Matz is my tEacher"[/[a-z][A-Z].*/]
+
