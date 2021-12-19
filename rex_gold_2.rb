@@ -371,3 +371,344 @@ p d.class
 
 p "Matz is my tEacher"[/[a-z][A-Z].*/]
 
+
+t = Time.new(2021,12,19,zone = 'JST')
+r = Rational(1, 24)
+(t-r).class
+
+
+def hoge(*args, &block)
+  block.call(args)
+  block.yield(args)
+  block.(args)
+  block[args]
+end
+hoge(1,2,3,4) do |*args|
+  p args.length < 0 ? "hello" : args
+end
+
+x = 'my x var'
+MyClass = Class.new do
+  puts "x in class -> #{x}"
+  define_method :my_method do
+     puts "x in method -> #{x}"
+  end
+end
+puts MyClass.new.my_method
+
+
+def define_methods
+  shared = 0
+
+  Kernel.send :define_method, :counter do
+    shared
+  end
+
+  Kernel.send :define_method, :inc do |x|
+    shared += x
+  end
+
+  Kernel.send :define_method, :sub do |x|
+    shared -= x
+  end
+end
+
+define_methods
+
+counter       # => 0
+inc(4)
+counter       # => 4
+sub(4)
+counter #0
+
+
+class MC
+  def initialize
+    @v = 1
+  end
+end
+obj = MC.new
+obj.instance_eval { @v = 2 }
+p obj.instance_eval { @v }
+
+
+class MC
+  def initialize
+    @v = 1
+  end
+end
+class D
+  def twisted_method
+    @y = 2
+    MC.new.instance_exec(@y) { |y| "v: #{@v}, y: #{y}" }
+    # MC.new.instance_eval { "v: #{@v}, y: #{@y}" }
+  end
+end
+D.new.twisted_method
+
+
+inc = Proc.new { |x| x + 1 }
+inc.call 1
+inc.yield 1
+inc.(1)
+inc[1]
+dec = lambda { |x| x - 1 }
+p dec.class
+dec.call 1
+inc.call 1, 2
+dec.call 1, 2
+inc = Proc.new { |x| x + 1; break }
+def break_test_lambda
+  dec = lambda { |x| x - 1; break }
+  dec.call(1)
+  p 'break out of lambda'
+end
+break_test_lambda
+def break_test_proc
+  dec = Proc.new { |x| x - 1; break }
+  dec.call(1, 2)
+  p 'break out of proc'
+end
+break_test_proc
+
+
+def proc_return
+  f = Proc.new { |n| break n * 10 }
+  ret = [1, 2, 3].map(&f)
+  "ret: #{ret}"
+end
+
+def lambda_return
+  f = -> (n) { break n * 10 }
+  ret = [1, 2, 3].map(&f)
+  "ret: #{ret}"
+end
+
+def block_return
+  ret = [1, 2, 3].map { |n| break n * 10 }
+  "ret: #{ret}"
+end
+
+proc_return   #=> 10
+lambda_return #=> "ret: [10, 20, 30]"
+block_return  #=> 10
+
+
+def proc_next
+  f = Proc.new { |n| next n * 10 }
+  ret = [1, 2, 3].map(&f)
+  "ret: #{ret}"
+end
+
+def lambda_next
+  f = -> (n) { next n * 10 }
+  ret = [1, 2, 3].map(&f)
+  "ret: #{ret}"
+end
+
+def block_next
+  ret = [1, 2, 3].map { |n| next n * 10 }
+  "ret: #{ret}"
+end
+
+proc_next   #=> "ret: [10, 20, 30]"
+lambda_next #=> "ret: [10, 20, 30]"
+block_next  #=> "ret: [10, 20, 30]"
+
+
+def proc_return
+  Proc.new { |n| return n * 10 }
+end
+
+def lambda_return
+  -> (n) { return n * 10 }
+end
+
+[1, 2, 3].map(&proc_return)   #=> LocalJumpError: unexpected return
+[1, 2, 3].map(&lambda_return) #=> [10, 20, 30]
+
+
+enum = "apple".enum_for(:)
+
+p enum.next
+p enum.next
+p enum.next
+p enum.next
+p enum.next
+
+
+module Enumerable
+  def repeat(n)
+    raise ArgumentError, "#{n} is negative!" if n < 0
+    unless block_given?
+      # __method__ はここでは :repeat
+      return to_enum(__method__, n) do
+        # size メソッドが nil でなければ size * n を返す。
+        p "size -> #{size}"
+        sz = size
+        sz * n if sz
+      end
+    end
+    each do |*val|
+      p "val -> #{val}"
+      n.times { yield *val }
+    end
+  end
+end
+
+%i[hello world].repeat(2) { |w| puts w }
+# => 'hello', 'hello', 'world', 'world'
+enum = (1..14).repeat(3)
+# => #<Enumerator: 1..14:repeat(3)>
+enum.first(4) # => [1, 1, 1, 2]
+enum.size # => 42
+enum = (0..1).repeat(3)
+
+
+begin
+  print "liberty" + :fish.to_s
+rescue TypeError
+  print "TypeError."
+rescue
+  print "Error."
+else
+  print "Else."
+ensure
+  print "Ensure."
+end
+
+
+def foo(n)
+  n ** n
+end
+foo = Proc.new { |n|
+  n * 3
+}
+foo = 'hoge'
+puts foo[2] * 2 #12
+puts foo.(2) * 4 #24
+puts foo.call(2) * 5 #30
+puts foo.yield(2) * 6 #36
+p foo
+
+
+10.times{|d| print d < 2...d > 5 ? "O" : "X" }
+10.times{|d| p d < 2...d > 5 ? "O" : "X"}
+1 < 2...1 > 5
+
+
+def foo(arg1:100, arg2:200)
+  puts arg1
+  puts arg2
+end
+
+option = {arg2: 900}
+
+foo arg1: 200, *option
+
+
+module M
+  @@val = 75
+
+  class Parent
+    @@val = 100
+  end
+
+  class Child < Parent
+    @@val += 50
+    def equality_class
+      if Child < Parent
+        @@val += 25
+      else
+        @@val += 30
+      end
+    end
+  end
+
+  class Aunt
+    @@val = 100
+    Child.new
+  end
+end
+p M::Child.class_variable_get(:@@val)
+M::Child.new.equality_class
+p M::Child.class_variable_get(:@@val)
+p M.class_variable_get(:@@val)
+p M::Parent.class_variable_get(:@@val)
+p M::Aunt.class_variable_get(:@@val)
+
+
+val = 1i * 1i
+puts val.class
+
+
+module SuperMod
+  module BaseMod
+    p Module.nesting
+  end
+end
+
+
+array = ["a", "b", "c"].freeze
+array = array.map!{|content| content.succ}
+
+p array
+
+
+class C
+end
+
+module M
+  refine C do
+    def m1(value)
+      super value - 100
+    end
+  end
+end
+
+class C
+  def m1(value)
+    value - 100
+  end
+end
+
+# using M
+
+class K < C
+  def m1(value)
+    super value - 100
+  end
+
+  def self.usings
+    using M
+  end
+end
+
+puts K.new.m1 400
+puts K.usings
+
+
+module K
+  class P
+    CONST = "Good, night"
+  end
+end
+
+module K::P::M
+  class C
+    CONST = "Good, evening"
+  end
+end
+
+module M
+  class C
+    CONST = "Hello, world"
+  end
+end
+
+class K::P
+    p CONST
+    class M::C
+    # p CONST
+  end
+end
