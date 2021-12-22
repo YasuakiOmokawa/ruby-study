@@ -765,3 +765,178 @@ Child1.new
 Child2.new
 
 p Object::CONST
+
+
+class Hoge
+  def hoge
+    'hoge'
+  end
+end
+
+
+module MathConstant
+  PI = 3.14
+end
+
+class Area
+  include MathConstant
+
+  def circle(r)
+    r * r * PI
+  end
+end
+
+area = Area.new
+p area.circle 10
+
+
+module MathConstant
+  PI = 3.14
+end
+
+class Area < MathConstant
+  def circle(r)
+    r * r * PI
+  end
+end
+
+area = Area.new
+p area.circle 10
+
+
+module MathConstant
+  PI = 3.14
+end
+
+class Area
+  def circle(r)
+    r * r * MathConstant::PI
+  end
+end
+
+area = Area.new
+p area.circle 10
+
+
+module MathConstant
+  PI = 3.14
+end
+
+class Area
+  def circle(r)
+    r * r * ::PI
+  end
+end
+
+area = Area.new
+p area.circle 10
+
+class Foo
+  def initialize(num)
+    @hoge = num
+  end
+end
+
+num = (1..99).to_a.shuffle.first
+foo = Foo.new(num)
+
+
+class Foo
+  attr_reader :var
+
+  @var = "1"
+
+  def initialize
+    @var = "2"
+  end
+end
+
+class Baz < Foo
+  def self.var
+    @var
+  end
+end
+
+def Foo.var
+  @var
+end
+
+arr = [
+  Foo.new.var,
+  Foo.var,
+  Baz.new.var,
+  Baz.var
+]
+
+p arr
+
+
+class Array
+  def succ_each(step = 1)
+    return each(:succ_each) unless block_given?
+
+    each do |int|
+      yield int + step
+    end
+  end
+end
+
+p [98, 99, 100].succ_each(2).map {|succ_chr| succ_chr.chr}
+
+[101, 102, 103].succ_each(5) do |succ_chr|
+  p succ_chr.chr
+end
+
+
+class Array
+  def succ_each(step = 1)
+    return to_enum(:succ_each) unless block_given?
+
+    each do |int|
+      yield int + step
+    end
+  end
+end
+
+p [98, 99, 100].succ_each(2).map {|succ_chr| succ_chr.chr}
+
+[101, 102, 103].succ_each(5) do |succ_chr|
+  p succ_chr.chr
+end
+
+
+class Array
+  def succ_each(step = 1)
+    unless block_given?
+      Enumerator.new do |yielder|
+        each do |int|
+          yielder << int + step
+        end
+      end
+    else
+      each do |int|
+        yield int + step
+      end
+    end
+  end
+end
+
+p [98, 99, 100].succ_each(2).map {|succ_chr| succ_chr.chr}
+
+[101, 102, 103].succ_each(5) do |succ_chr|
+  p succ_chr.chr
+end
+
+
+module Parent
+  def method_1
+    __method__
+  end
+end
+
+module Child
+  include Parent
+  extend self
+end
+
+p Child::method_1
