@@ -940,3 +940,37 @@ module Child
 end
 
 p Child::method_1
+
+
+class C
+  def self.m1
+    'C.m1'
+  end
+end
+
+module M
+  refine C.singleton_class do
+    def m1
+      'C.m1 in M'
+    end
+  end
+end
+
+using M
+
+puts C.m1 # C.m1 in M と表示されます。
+
+
+10.times{|d| print d < 2...d > 5 ? "O" : "X" }
+0<2, 0>5 .. true
+1<2, 1>5 .. false > true
+2<2, 2>5 .. false > true
+3<2, 3>5 .. false > true
+4<2, 4>5 .. false > true
+5<2, 5>5 .. false > true
+6<2, 6>5 .. true > true
+7<2, 7>5 .. false
+8<2, 8>5 .. false
+9<2, 9>5 .. false
+
+
