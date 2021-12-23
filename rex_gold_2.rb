@@ -974,3 +974,30 @@ puts C.m1 # C.m1 in M と表示されます。
 9<2, 9>5 .. false
 
 
+module K
+  class P
+    p Module.nesting # [K::P, K]と表示されます
+  end
+end
+
+module K::P::M
+  class C
+    CONST = 'k,p,m,c'
+    p Module.nesting # [K::P::M::C, K::P::M]と表示されます
+  end
+end
+
+module M
+  class C
+    p Module.nesting # [M::C, M]と表示されます
+  end
+end
+
+class K::P
+  class M::C
+    p CONST
+    p Module.nesting # [K::P::M::C, K::P]と表示されます
+  end
+end
+
+
