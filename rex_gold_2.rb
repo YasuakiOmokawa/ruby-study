@@ -1001,3 +1001,59 @@ class K::P
 end
 
 
+p Class.method_defined? :new #=> ture
+p String.method_defined? :new #=> false
+p Class.singleton_class.method_defined? :new #=> ture
+p String.singleton_class.method_defined? :new #=> ture
+
+p Class.singleton_class.method_defined? :new, false #=> ture
+p String.singleton_class.method_defined? :new, false #=> ture
+
+p String.method_defined? :new #=> false
+class String
+  def new
+    'new'
+  end
+end
+p String.method_defined? :new #=> false
+
+p String.method(:new).source_location
+
+
+
+module Parent
+  def method_1
+    __method__
+  end
+end
+module Child
+  include Parent
+  extend self
+end
+p Child::method_1
+
+module Parent
+  def method_1
+    __method__
+  end
+end
+module Child
+  include Parent
+end
+module Child
+  extend self
+end
+Child.ancestors
+p Child::method_1
+
+module Parent
+  def method_1
+    __method__
+  end
+end
+module Child
+  extend self
+  include Parent
+end
+p Child::method_1
+
