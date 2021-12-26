@@ -1159,3 +1159,169 @@ loop do
 end
 
 
+def top_level_method
+  'hoge'
+end
+
+String.methods == "abc".methods
+String.instance_methods == "abc".methods
+
+p Class.superclass
+# Objectを継承してModuleが実装されている
+p Module.superclass
+
+class C
+  def public_method
+    self.private_method
+  end
+
+  private
+  def private_method
+    'private'
+  end
+end
+# => nil
+C.new.public_method
+class D < C
+  def public
+    private_method
+  end
+end
+D.new.public
+
+
+class MyClass
+  def my_method(my_arg)
+    my_arg * 2
+  end
+
+  define_method :defined do |arg|
+    arg * 3
+  end
+end
+obj = MyClass.new()
+obj.send(:my_method1, 2)
+obj.send(:hoge, 2)
+
+obj.define_method(:defined) do |arg|
+  arg * 3
+end
+p obj.defined(3)
+
+
+class MyClass
+  # これだとインスタンスの属性定義になってしまう
+  attr_accessor :a
+end
+
+MyClass.a # => NoMethodError: undefined method `c' for MyClass:Class
+mc = MyClass.new()
+mc.a = 1
+mc.a # => 1
+
+class MyClass
+  # 特異クラスに属性追加することでクラスに属性追加
+  class << self
+    # クラス属性の定義コンテキストで定義
+    attr_accessor :c
+  end
+end
+
+MyClass.c = '属性定義'
+MyClass.c # => '属性定義'
+
+module MyModule
+  def my_method
+    puts 1
+  end
+end
+
+class MyClass
+  class << self
+    # 特異クラス内でインスタンスメソッドを拡張させるとクラスメソッドとして定義可能
+    include MyModule
+  end
+end
+
+MyClass.my_method # => 1
+
+
+module MyModule
+  def my_method
+    puts 1
+  end
+end
+module MyModule2
+  include MyModule
+  extend self
+end
+class MyClass
+  include MyModule2
+end
+# p MyClass.my_method # => 1
+p MyModule2.my_method # => 1
+
+ENV[:PATH] = "user/..." # => キーがシンボルなので指定不可
+ENV['PATH'] = 1234 # => 代入する値が文字列ではないので指定不可
+ENV['PATH'] = 'user/local...' # => どちらも文字列なので指定可
+
+class Foo
+  def foo
+    @value
+  end
+end
+p Foo.new.foo # => nil
+
+class Foo
+  @@value
+  def bar
+    @@value # => uninitialized class variable ... (NameError)
+  end
+end
+p Foo.new.bar
+
+
+CONST = "a"
+def foo1; p CONST; end
+def foo2; p CONST = "b"; end # => dynamic constant assignment
+def foo3; p CONST += "c"; end # => dynamic constant assignment
+def foo4; p CONST << "d"; end
+def foo5; p CONST + "d"; end
+
+foo1 # => "a"
+foo2 # 定義の段階でエラー
+foo3 # 定義の段階でエラー
+foo4 # => "ad" 破壊的なメソッドではないのでいけるらしいです
+foo5
+
+arr = [1,2,3].freeze
+p arr.uniq
+p arr.uniq!
+p arr + [4,5]
+p arr = [4,5]
+
+
+class C
+  attr_reader :num
+
+  def initialize(num)
+    @num = num
+  end
+end
+
+class MyNum < C
+  def <=>(other)
+    @num <=> other.num
+  end
+end
+
+var1 = C.new(3)
+var2 = C.new(1)
+var3 = C.new(2)
+p [var1, var2, var3].sort.map{|n| n.num } # => `sort': comparison of C with C failed (ArgumentError)
+
+num1 = MyNum.new(30)
+num2 = MyNum.new(10)
+num3 = MyNum.new(20)
+p [num1, num2, num3].sort.map{|n| n.num } # => [10, 20, 30]
+
