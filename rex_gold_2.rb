@@ -1057,3 +1057,105 @@ module Child
 end
 p Child::method_1
 
+
+p (1..10).lazy.map{|num|
+  num * 2
+}.take(3).inject(0, &:+)
+
+
+x,*y = *[0,1,2]
+
+
+module M1
+  def foo
+  end
+  def self.moo
+    undef foo
+  end
+end
+M1.instance_methods false #=> ["foo"]
+M1.moo
+M1.instance_methods false #=> []
+module M2
+  def foo
+  end
+  def self.moo
+    undef_method :foo
+  end
+end
+M2.instance_methods false #=> ["foo"]
+M2.moo
+M2.instance_methods false #=> []
+
+module M2
+  def foo
+  end
+  def self.moo
+    undef foo
+  end
+end
+
+class C
+  def foo
+  end
+  def self.moo
+    undef_method 'foo'
+  end
+end
+C.moo
+
+
+class A
+  def ok
+    puts 'A'
+  end
+end
+class B < A
+  def ok
+    puts 'B'
+  end
+end
+
+B.new.ok   # => B
+
+# undef_method の場合はスーパークラスに同名のメソッドがあっても
+# その呼び出しはエラーになる
+class B
+  undef_method :ok
+end
+B.new.ok   # => NameError
+
+# remove_method の場合はスーパークラスに同名のメソッドがあると
+# それが呼ばれる
+class B
+  remove_method :ok
+end
+B.new.ok   # => A
+
+obj = Hash.new
+obj.define_singleton_method(:hoge) do
+  'hoge'
+end
+p Marshal.dump(obj)
+p Marshal.dump(IO.new(1))
+
+
+t = Thread.new do
+  raise "unhandled exception"
+end
+sleep
+
+Thread.new do
+  (1..3).each{|i|
+    p i
+    Thread.pass
+  }
+  exit
+end
+
+loop do
+  Thread.pass
+  p :main
+end
+
+
