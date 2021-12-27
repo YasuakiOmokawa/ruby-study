@@ -1325,3 +1325,12 @@ num2 = MyNum.new(10)
 num3 = MyNum.new(20)
 p [num1, num2, num3].sort.map{|n| n.num } # => [10, 20, 30]
 
+for var in [0,1,2] do
+  num = var
+end
+p num
+[1,2,3].each do |var|
+  num2 = var
+end
+p num2
+
