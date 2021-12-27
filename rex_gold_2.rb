@@ -1334,3 +1334,10 @@ p num
 end
 p num2
 
+# ブロックはつくらない
+i = 1
+while i > 0 do
+  num3 = i
+  i = i - 1
+end
+p num3
