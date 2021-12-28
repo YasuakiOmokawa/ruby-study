@@ -1341,3 +1341,10 @@ while i > 0 do
   i = i - 1
 end
 p num3
+
+a = 1
+def aa(a)
+  yield(a)
+end
+aa(a) {|a| a += 1 }
+p a # => 1
