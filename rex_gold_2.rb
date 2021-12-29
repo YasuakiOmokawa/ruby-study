@@ -1725,3 +1725,66 @@ end
 p lambda_test # => 2
 
 
+class Foo
+  def initialize(data)
+    @data = data
+  end
+  def method_missing(name, lang)
+    if name.to_s =~ /\Afind_(\d+)_in\z/
+      begin
+        p @data[lang][$1.to_i]
+      rescue => e
+        p "#{lang} unknown -> #{e}"
+      end
+    else
+      super
+    end
+  end
+end
+dic = Foo.new({:English => %w(zero one two), :Esperanto => %w(nulo unu du)})
+dic.find_2_in :Esperanto #=> "du"
+dic.find_0_in :Esperanto #=> "nulo"
+dic.find_3_in :English
+dic.find_3_in :Japan
+dic.no_method
+
+
+var1 = "".freeze
+var1 = "foo" # 代入は防げない
+p var1 #=> "foo"
+var1.replace("bar") # 凍結後、再代入すると破壊的メソッドで変更可能でした
+p var1 # => "bar"
+var1.freeze # 再度凍結
+var1.replace("bar")# can't modify frozen string (RuntimeError)
+
+
+class C
+end
+
+module M
+  CONST = "Hello, world"
+
+  C.class_eval do
+    def awesome_method
+      CONST
+    end
+  end
+end
+
+p C.new.awesome_method
+
+class C
+  CONST = "Hello, world"
+end
+
+module M
+  C.class_eval(<<-CODE)
+    def awesome_method
+      CONST
+    end
+  CODE
+end
+
+p C.new.awesome_method
+
+
