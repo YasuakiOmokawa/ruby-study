@@ -1348,3 +1348,12 @@ def aa(a)
 end
 aa(a) {|a| a += 1 }
 p a # => 1
+
+class Foo
+  @@var
+  def var
+    @@var
+  end
+end
+p Foo.new.var
+
