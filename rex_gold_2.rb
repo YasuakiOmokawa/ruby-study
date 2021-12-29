@@ -1357,3 +1357,140 @@ class Foo
 end
 p Foo.new.var
 
+class Foo
+  def foo
+    @var
+  end
+end
+p Foo.new.foo
+
+loop do
+  num2 = 1
+  break
+end
+p num2
+
+while 1 == 1 do
+  num3 = 1
+  break
+end
+p num3
+
+
+# b = 'h1'
+def hoge(tag)
+  "<#{tag}>#{yield}</#{tag}>"
+end
+p hoge('h1') { 'hoge' }
+p hoge('b') { 'fuga' }
+
+
+def msd
+  begin
+    "a"
+  rescue
+    "b"
+  else
+    "c"
+  ensure
+    p "d"
+  end
+end
+p msd # => "c"
+
+
+class C
+  def internal_use_private_and_protected
+    protected_method # 呼び出し可
+    private_method # 呼び出し可
+  end
+
+  def internal_use_private_and_protected_with_reciever
+    self.protected_method # 呼び出し可。自クラスから呼び出し可。
+    self.private_method # 呼び出し不可。レシーバーから呼び出せない。
+  end
+
+  def use_protected(other)
+    other.protected_method # 自クラス、サブクラスなら呼び出し可。
+  end
+
+  def use_private(other)
+    other.private_method # 自クラス、サブクラスなら呼び出し可。
+  end
+
+  protected
+  def protected_method
+    puts "protected_method"
+  end
+
+  private
+  def private_method
+    puts "private_method"
+  end
+end
+
+class D < C
+end
+
+c = C.new
+# 外部から直接呼び出し不可
+c.protected_method #=> NoMethodError: protected method `protected_method' called for
+
+# 外部から直接呼び出し不可
+c.private_method #=> NoMethodError: private method `private_method' called for
+
+# レシーバーなしでは両方呼び出し可
+c.internal_use_private_and_protected
+#=> protected_method
+#=> private_method
+
+# レシーバーあり(自クラス)ではprotectedのみ呼び出せる
+c.internal_use_private_and_protected_with_reciever
+#=> protected_method
+#=> NoMethodError: private method `private_method' called for
+
+c.use_protected(d)
+
+d = D.new
+# サブクラスから呼び出し可
+d.use_protected(d) #=>protected_method
+d.use_private(d)
+
+
+class C
+  protected
+  def protected_method
+    puts "protected_method"
+  end
+
+  private
+  def private_method
+    puts "private_method"
+  end
+end
+
+class D < C
+  #表示内容の変更と可視性をpublicへ変更
+  def protected_method
+    puts "edit protected_method"
+  end
+
+  #表示内容の変更と可視性をpublicへ変更
+  def private_method
+    puts "edit private_method"
+  end
+end
+
+d = D.new
+p d.protected_method # =>edit protected_method
+p d.private_method # =>edit private_method
+
+
+ENV['A'] = "TEST"
+ENV[1] = "TEST"
+ENV['A'] = 1
+
+
+ENV.class
+
+
