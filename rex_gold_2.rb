@@ -1494,3 +1494,234 @@ ENV['A'] = 1
 ENV.class
 
 
+X = 'abc'
+def m
+  X #  (1)
+  X = 'def' # (2)
+  X += 'def' #(3)
+  X << 'def' # (4)
+end
+
+
+require 'english'
+
+class ScopeResearchClass
+  def public_method
+    'public'
+  end
+
+  def use_protected(other)
+    puts other.protected_method
+  end
+
+  def use_private(other)
+    other.private_method
+  rescue
+    puts $ERROR_INFO
+  end
+
+  def internal_use_private_and_protected
+    puts protected_method
+    puts private_method
+  end
+
+  def internal_use_private_and_protected_with_reciever
+    puts self.protected_method
+    self.private_method
+  rescue
+    puts $ERROR_INFO
+  end
+
+  protected
+
+  def protected_method
+    'protected'
+  end
+
+  private
+
+  def private_method
+    'private'
+  end
+end
+
+pc1 = ScopeResearchClass.new
+pc2 = ScopeResearchClass.new
+
+begin
+  pc1.protected_method
+rescue
+  # protected は外部からは呼び出せずにエラー
+  puts $ERROR_INFO
+end
+
+begin
+  pc1.private_method
+rescue
+  # private は外部からは呼び出せずにエラー
+  puts $ERROR_INFO
+end
+
+# private / protected ともに内部から利用可能
+pc1.internal_use_private_and_protected
+
+# protected は レシーバーつきでも呼び出し可能
+# private は レシーバーつきだと呼び出せず
+pc1.internal_use_private_and_protected_with_reciever
+
+class Hoge
+  def can_not_use_external_protected_method(other)
+    other.protected_method
+  rescue
+    puts $ERROR_INFO
+  end
+end
+
+# 関係ないクラス内からは呼び出せないことを確認
+Hoge.new.can_not_use_external_protected_method(pc2)
+
+# protected メソッドは自クラスに別インスタンスを渡しても呼び出し可能
+pc1.use_protected(pc2)
+
+# private メソッドは自クラスに別インスタンスを渡した場合、レシーバーの指定が出来ないのでエラーになる
+pc1.use_private(pc2)
+
+class ChildProtectedClass < ScopeResearchClass
+  def use_protected_from_child(other)
+    puts other.protected_method
+  end
+end
+
+# protected メソッドはサブクラスに別インスタンスを渡しても呼び出し可能
+ChildProtectedClass.new.use_protected_from_child(pc2)
+
+
+
+class Foo
+  def _val
+    @val
+  end
+  protected :_val
+
+  def op(other)
+
+    # other も Foo のインスタンスを想定
+    # _val が private だと関数形式でしか呼べないため
+    # このように利用できない
+
+    self._val + other._val
+  end
+end
+
+f1 = Foo.new
+f1.instance_variable_set(:@val, 1) # => @val に無理やり 1 を設定
+f2 = Foo.new
+f2.instance_variable_set(:@val, 2) # => @val に無理やり 2 を設定
+puts f1.op(f2) # => 3
+
+
+a, b, c = catch :exit do
+  for x in 1..10
+    for y in 1..10
+      throw :exit, [x, y, 1] if x + y == 10
+    end
+  end
+end
+puts a, b, c
+
+
+a, b = catch :exit do
+  for x in 1..10
+    for y in 1..10
+      return [x, y] if x + y == 10
+    end
+  end
+end
+
+a, b = catch :exit do
+  for x in 1..10
+    for y in 1..10
+      break [x, y] if x + y == 10
+    end
+  end
+end
+
+result = catch do |tag|
+  for i in 1..2
+    for j in 1..2
+      for k in 1..2
+        next k
+      end
+    end
+  end
+end
+p result #=> 1
+
+
+a, b, c = catch :ext do
+  for x in 1..10
+    for y in 1..10
+      throw :ext, [x, y, 1] if x + y == 10
+    end
+  end
+end
+puts a, b, c
+
+
+def foo
+  throw :exit, 25
+end
+
+ret = catch(:exit) do
+  begin
+    foo
+    some_process()    # 絶対に実行されない
+    10
+  ensure
+    p "ensure"
+  end
+end
+puts ret
+#=> ensure
+#   25
+
+
+def func(arg, *args)
+  p arg
+  p args
+  p *args
+end
+
+func *[1, 2, 3]
+func 1, 2, 3
+
+
+def func(**hash)
+  p hash
+  p **hash
+end
+
+func key: "val"
+func **{key: "val"}
+
+
+# Procの場合
+def proc_test
+  proc = Proc.new{return "生成元のスコープ(メソッド)から脱出"}
+  proc.call
+  2 # ここは実行されない
+end
+
+p proc_test # => "生成元のスコープ(メソッド)から脱出"
+
+
+# lambdaの場合
+def lambda_test
+  lambda = -> {return "呼び出し元へ復帰"}
+  lambda.call
+  2 # ここは実行される
+end
+
+p lambda_test # => 2
+
+
