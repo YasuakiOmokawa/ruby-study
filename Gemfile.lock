@@ -22,13 +22,17 @@ GEM
       money (~> 6.12)
     money (6.16.0)
       i18n (>= 0.6.4, <= 2)
+    rbs (2.0.0)
     sqlite3 (1.4.2)
+    typeprof (0.21.2)
+      rbs (>= 1.8.1)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     zeitwerk (2.4.2)
 
 PLATFORMS
   x86_64-darwin-19
+  x86_64-darwin-21
 
 DEPENDENCIES
   activerecord
@@ -36,6 +40,7 @@ DEPENDENCIES
   benchmark-ips
   monetize
   sqlite3
+  typeprof
 
 BUNDLED WITH
-   2.2.15
+   2.3.3
