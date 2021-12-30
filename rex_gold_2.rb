@@ -1788,3 +1788,70 @@ end
 p C.new.awesome_method
 
 
+module M
+  def class_m
+    "class_m"
+  end
+end
+class C
+  include M
+end
+p C.methods.include? :class_m
+class C
+  extend M
+end
+p C.methods.include? :class_m
+
+
+f = Fiber.new do
+  (1..3).each do |i|
+    Fiber.yield i
+  end
+  nil
+end
+
+p f.resume # => 1
+p f.resume # => 2
+p f.resume # => 3
+p f.resume # => nil
+p f.resume # FiberError(例外発生)
+
+
+class Sample
+  def initialize
+    @x = 1
+  end
+end
+
+sample = Sample.new
+sample.instance_eval do
+  @y = 1
+  def output # =>　これは特異クラスのインスタンスメソッドになる
+    @x + @y
+  end
+end
+
+puts sample.output # => 2
+puts sample.singleton_class.instance_methods.grep(/output/) # => output
+
+
+class Sample
+  def initialize
+    @x = 1
+  end
+end
+
+Sample.class_eval do
+  @y = 1 # クラスインスタンス変数
+  def output # クラス内のインスタンスメソッド
+    @@a = 1 # クラス変数
+    @x
+  end
+end
+
+sample = Sample.new
+puts sample.instance_variables # => @x
+puts Sample.instance_variables # => @y
+puts Sample.class_variables # => @@a
+puts sample.output # => 1
+puts Sample.instance_methods.grep(/output/) # => output
