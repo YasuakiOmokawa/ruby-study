@@ -1880,3 +1880,91 @@ S.new
 
 p C.class_variable_get(:@@val)
 
+
+class C
+  def m1
+    200
+  end
+end
+
+module R
+  refine C do
+    def m1
+      100
+    end
+  end
+end
+
+using R
+
+c = C.new
+puts c.m1
+
+module M1
+end
+
+module M2
+end
+
+class C
+  include M1
+  include M2
+end
+
+p C.ancestors
+
+
+p Marshal.dump({a: 1, b: 2, c: 5})
+
+file = File.open("/tmp/marshaldata", "w+") # => #<File:/tmp/marshaldata>
+Marshal.dump({a: 1, b: 2, c: 3}, file)
+Marshal.dump(Hash.new {})
+Marshal.dump([])
+
+class C
+end
+c = C.new
+Marshal.dump(c)
+c.instance_eval do
+  def hoge
+    'hoge'
+  end
+end
+Marshal.dump(c)
+ac = Class.new
+Marshal.dump(ac)
+file = File.open("/tmp/marshaldata", "r+")
+Marshal.dump(file)
+p Marshal.load(file)
+
+
+class C
+  def hoge
+    puts "hogeを定義"
+  end
+end
+
+module M
+  refine C do
+    def hoge
+      puts "hogeの内容を変更: 変更を有効にしました"
+    end
+  end
+end
+module M2
+  refine C do
+    def hoge
+      puts "hogeの内容を変更: 変更を有効にしました2"
+    end
+  end
+end
+
+c = C.new
+c.hoge
+
+using M
+using M2
+
+c.hoge
+
+
