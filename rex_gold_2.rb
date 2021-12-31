@@ -1968,3 +1968,80 @@ using M2
 c.hoge
 
 
+module M
+  def hoge
+    'hoge'
+  end
+end
+class C
+    include M
+end
+p C.ancestors
+p C.hoge
+class C
+  extend M
+end
+p C.ancestors
+p C.hoge
+
+
+module M1
+end
+
+module M2
+end
+
+class Cls1
+  include M1
+  def self.hoge
+    p self.ancestors
+  end
+end
+p Cls1.hoge
+class Cls2 < Cls1
+  def foo
+    p self.ancestors
+  end
+  include M2
+end
+
+Cls2.new.foo
+c1 = Cls1.new
+
+
+module M
+  def self.append_features(include_class_name)
+    puts "append_features"
+    super # このsuperを書かないとエラー発生
+  end
+  def func
+    p "Hello World"
+  end
+end
+
+class C
+  include M
+end
+
+C.new.func
+
+
+class Object
+  CONST = "100"
+end
+
+class C
+  CONST = "010"
+  class << self
+    CONST = "001"
+    def const
+      CONST
+    end
+  end
+end
+
+p C::CONST
+p CONST
+p C.const
+
+
