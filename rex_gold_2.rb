@@ -2045,3 +2045,31 @@ p CONST
 p C.const
 
 
+def m1(*)
+  str = yield if block_given?
+  p "m1 #{str}"
+end
+
+def m2(*)
+  str = yield if block_given?
+  p "m2 #{str}"
+end
+
+m1 m2 do
+  "hello"
+end
+
+
+module M
+  def class_m
+    "class_m"
+  end
+end
+
+class C
+  extend M
+end
+
+p C.methods.include? :class_m
+
+
