@@ -2073,3 +2073,142 @@ end
 p C.methods.include? :class_m
 
 
+class C
+  def m1
+    200
+  end
+end
+
+module R
+  refine C do
+    def m1
+      100
+    end
+  end
+end
+
+c = C.new
+puts c.m1
+
+
+module M
+  def method_missing(id, *args)
+    puts "M#method_missing"
+  end
+end
+class A
+  include M
+  def method_missing(id, *args)
+    puts "A#method_missing"
+  end
+end
+class B < A
+  class << self
+    def method_missing(id, *args)
+      puts "B.method_missing"
+    end
+  end
+end
+
+B.new.dummy_method #A
+B.dummy_method #B
+module M
+  def method_missing(id, *args)
+    puts "M#method_missing"
+  end
+end
+class A
+  extend M
+  def method_missing(id, *args)
+    puts "A#method_missing"
+  end
+end
+A.dummy_method #M
+
+
+class C
+  def self.m1
+    200
+  end
+end
+
+module R
+  refine C do
+    def self.m1
+      100
+    end
+  end
+end
+
+using R
+
+puts C.m1
+
+
+class C
+  def self.m1
+    200
+  end
+end
+module R
+  refine C.singleton_class do
+    def m1
+      100
+    end
+  end
+end
+
+puts C.m1 #200
+using R
+puts C.m1 #100
+
+
+class Human
+  NAME = "Unknown"
+
+  def self.name
+    const_get(:NAME)
+  end
+end
+
+class Fukuzawa < Human
+  NAME = "Yukichi"
+end
+
+puts Fukuzawa.name
+
+
+module M
+  def foo
+    super
+    puts "M#foo"
+  end
+end
+
+class C2
+  def foo
+    puts "C2#foo"
+  end
+end
+
+class C < C2
+  def foo
+    super
+    puts "C#foo"
+  end
+  load M
+end
+
+C.new.foo
+
+
+def hoge(*args, &block)
+  p args
+  p *args
+  block.call(*args)
+end
+hoge(1,2,3,4) do |*args|
+  p args
+  p args.length > 0 ? "hello" : args
+end
+
