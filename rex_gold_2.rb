@@ -2212,3 +2212,98 @@ hoge(1,2,3,4) do |*args|
   p args.length > 0 ? "hello" : args
 end
 
+
+class C
+  def m1(value)
+    100 + value
+  end
+end
+
+module R1
+  refine C do
+    def m1
+      super 50
+    end
+  end
+end
+
+module R2
+  refine C do
+    def m1
+      super 100
+    end
+  end
+end
+
+using R1
+using R2
+
+puts C.new.m1
+
+
+class Base
+  CONST = "Hello, world"
+end
+
+class C < Base
+end
+
+module P
+  CONST = "Good, night"
+end
+
+class Base
+  # include P
+  prepend P
+end
+
+module M
+  class C
+    CONST = "Good, evening"
+  end
+end
+
+module M
+  class ::C
+    def greet
+      CONST
+    end
+  end
+end
+
+p C.new.greet #gn
+p M::C::CONST #ge
+p Base::CONST #hw
+
+require 'date'
+d = Date.today - Date.new(2015,10,1)
+p d.class
+
+
+class S
+  def initialize
+    puts "S#initialize"
+  end
+end
+
+class C < S
+  def initialize(*args)
+    super()
+    puts "C#initialize"
+  end
+end
+
+C.new(1,2,3,4,5)
+
+
+val = 100
+
+def m(val)
+  yield(15 + val)
+end
+
+_proc = Proc.new{|arg| val + arg }
+
+p m(val, &_proc)
+
+
