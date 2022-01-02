@@ -2307,3 +2307,142 @@ _proc = Proc.new{|arg| val + arg }
 p m(val, &_proc)
 
 
+class D
+  def func
+    "Hello"
+  end
+end
+class C < D
+end
+
+class E < C
+end
+
+c = C.new
+
+p c.func # => Hello
+
+# class_evalメソッド
+# ブロックをクラス定義やモジュール定義の中のコードであるように実行します。
+C.class_eval { undef_method :func }
+
+p c.func # => undefined method `func' for #<C:0x000056370fe002a8> (NoMethodError)
+p D.new.func #Hello
+p E.new.func #undefined method `func'
+
+
+class D
+  def func
+    "Hello"
+  end
+end
+class C < D
+end
+
+class E < C
+  def func
+    'Hello2'
+  end
+end
+
+c = C.new
+
+p c.func # => Hello
+
+# class_evalメソッド
+# ブロックをクラス定義やモジュール定義の中のコードであるように実行します。
+C.class_eval { remove_method :func }
+E.class_eval { remove_method :func }
+
+p c.func # => #Hello
+p D.new.func #Hello
+p E.new.func #Hello
+
+
+class String
+  # alias_method :hoge, :reverse #ok
+  # alias_method 'hoge', 'reverse' #ok
+  alias hoge reverse #ok
+end
+
+p "12345".hoge
+
+
+class Foo
+  def self.const_missing(name)
+    "定数 #{name} はありません"
+  end
+end
+
+p ::Foo::C
+
+
+def proc_exit
+  begin
+    exit
+  rescue SystemExit
+    puts "processing_exit"
+  ensure
+    puts "確保する"
+  end
+end
+proc_exit
+
+
+a = [1, 2, 3, 4, 5].lazy.select { |e| e % 2 == 0 } #<Enumerator::Lazy: #<Enumerator::Lazy: [1, 2, 3, 4, 5]>:select>
+b = a.map { |e| e * 2 } #<Enumerator::Lazy: #<Enumerator::Lazy: #<Enumerator::Lazy: [1, 2, 3, 4, 5]>:select>:map>
+c = a.take(3) #<Enumerator::Lazy: #<Enumerator::Lazy: #<Enumerator::Lazy: [1, 2, 3, 4, 5]>:select>:take(3)>
+p c.to_a # ここで評価される # => [2, 4]
+
+
+class Sample
+  include Comparable
+
+  def initialize(value)
+    @value = value
+  end
+
+  def value
+    @value
+  end
+
+  def <=>(other)
+    # other.value <=> self.value
+    self.value <=> other.value
+  end
+end
+
+a = Sample.new(10) #<Sample:0x000055c4a9f0cd00 @value=10>
+
+b = Sample.new(5) #<Sample:0x00005576e2290348 @value=5>
+
+a < b # => true
+
+a <= b # => true
+
+a == b # => false
+
+a > b # => false
+
+a >= b # => false
+
+
+
+a = 1 + "(1/2r)".to_r
+p a.class # => Rational
+
+a = a + 1.0
+p a.class # => Float
+
+a = a + "(1/2r)".to_r
+p a.class # => Float
+
+a = a + "(1 + 2i)".to_c
+p a.class # => Complex
+
+
+%r|Ruby| =~ "u"
+
+p $` # => "R"
+p $& # => "u"
+p $' # => "b"
