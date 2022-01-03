@@ -2331,6 +2331,7 @@ p D.new.func #Hello
 p E.new.func #undefined method `func'
 
 
+
 class D
   def func
     "Hello"
@@ -2446,3 +2447,95 @@ p a.class # => Complex
 p $` # => "R"
 p $& # => "u"
 p $' # => "b"
+
+
+require 'json'
+
+json = <<-DATA
+["Red", "Green", "Blue"]
+DATA
+
+p JSON.load(json)
+
+# 実行結果 ["Red", "Green", "Blue"]
+
+p JSON.load(json, lambda { |x| p x.downcase if x.is_a?(String) })
+
+
+require 'yaml'
+
+yaml_data = <<-DATA
+- red
+- green
+- blue
+---
+- yellow
+- pink
+- white
+DATA
+
+p YAML.load(yaml_data)
+
+
+require "date"
+require "time"
+
+# Dateクラス
+date = Date.new(2000, 1, 1)
+puts date + 1
+puts date >> 1
+# => 2000-01-02
+# => 2000-02-01
+
+# DateTimeクラス
+datetime = DateTime.new(2000, 1, 1)
+puts datetime + 1
+puts datetime >> 1
+# => 2000-01-02T00:00:00+00:00
+# => 2000-02-01T00:00:00+00:00
+
+# Timeクラス
+time = Time.new(2000, 1, 1, 0, 0, 0)
+puts time + 1
+# Timeだけ秒単位
+# => 2000-01-01 00:00:01 +0000
+
+
+Thread.new { 'Hello, World' }
+Thread.fork { 'Good Morning World' }
+Thread.start { 'Good Evening World' }
+p Thread.list
+
+
+fizzbuzz = Enumerator.new{|yielder|
+  1.upto(Float::INFINITY) do |n|
+    case
+    when n % 15 == 0 then yielder << "FizzBuzz"
+    when n % 5 == 0 then yielder << "Buzz"
+    when n % 3 == 0 then yielder << "Fizz"
+    else yielder << n.to_s
+    end
+  end
+}
+fizzbuzz.first(100).each do |str|
+  puts str
+end
+
+1.upto(100) do |n|
+  case
+  when n % 15 == 0 then puts 'FizzBuzz'
+  when n % 3 == 0 then puts 'Fizz'
+  when n % 5 == 0 then puts 'Buzz'
+  else puts n.to_s
+  end
+end
+
+
+f = Fiber.new{
+  Fiber.yield(x)
+  puts "hoge"
+}
+
+p "foo"
+p f.resume
+p "bar"
