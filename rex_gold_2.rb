@@ -2575,3 +2575,13 @@ _eval = m.instance_variable_get :@eval
 puts block.size
 puts _eval.size
 
+
+begin
+  print "liberty" + :fish
+rescue TypeError
+  print "TypeError."
+rescue
+  print "Error."
+else
+  print "Else."
+end
