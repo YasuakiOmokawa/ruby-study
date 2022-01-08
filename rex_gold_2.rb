@@ -2585,3 +2585,390 @@ rescue
 else
   print "Else."
 end
+
+
+module M
+  $m = self
+end
+
+class A
+  $a = self
+end
+
+class B < A
+  include M
+  $b = self
+end
+
+c = B.new
+$c = c.class
+
+puts $m #=> M
+puts $a #=> A
+puts $b #=> B
+puts $c #=> B
+
+
+class Cat
+  attr_accessor :name, :arr
+  def initialize(name, *options)
+    @name = name
+    @arr = options
+  end
+end
+
+cat = Cat.new("Tama", 1,2,3)
+cat.freeze
+(cat.name = "Piko") rescue p $! #=>#<RuntimeError: can't modify frozen Cat>
+
+puts cat.name.replace("Piko") #=> Piko
+puts cat.name #=> Piko
+p cat.name.frozen?
+cat.name.freeze
+p cat.name.frozen?
+puts cat.name.replace("Piko") #=> Piko
+p cat.frozen?
+
+
+module M
+  def method_missing(id, *args)
+    puts "M#method_missing()"
+  end
+end
+
+class A
+  prepend M
+  def method_missing(id, *args)
+    puts "A#method_missing()"
+  end
+end
+
+class B < A
+  def method_x
+    puts "#{self.class.name}:method_x"
+  end
+  class << self
+    def method_missing(id, *args)
+      puts "B`method_missing()"
+    end
+  end
+end
+
+obj = B.new
+obj.method_x #B:method_x
+obj.method_y #A#method_missing()
+
+
+class Module
+  def method_missing(id, *args)
+    puts "Module#method_missing()"
+  end
+end
+
+class Class
+  def method_missing(id, *args)
+    puts "Class#method_missing()"
+  end
+end
+
+module M
+  def method_missing(id, *args)
+    puts "M#method_missing()"
+  end
+end
+
+class A
+  include M
+  def method_missing(id, *args)
+    puts "A#method_missing()"
+  end
+end
+
+class B < A
+  def self.method_x
+    puts "#{self}.method_x"
+  end
+  def method_missing(id, *args)
+    puts "B#method_missing()"
+  end
+end
+
+B.method_x #B.method_x
+B.method_y #Class#method_missing()
+
+
+class Module
+  def const_missing(id)
+    puts "Module#const_missing()"
+    id = 1
+  end
+end
+
+class Class
+  def const_missing(id)
+    puts "Class#const_missing()"
+    id = 2
+  end
+end
+
+class Object
+  def const_missing(id)
+    puts "Object#const_missing()"
+    id = 3
+  end
+end
+
+class A
+  def const_missing(id)
+    puts "A#const_missing()"
+    id = 4
+  end
+end
+
+class B < A
+  CNST_X = "123"
+
+  def method01
+    puts "CNST_X=#{CNST_X}"
+    puts "CNST_Y=#{CNST_Y}"
+  end
+
+  def const_missing(id)
+    puts "B#const_missing()"
+    id = 5
+  end
+end
+
+obj = B.new
+obj.method01 # CNST_X, B#const_missing()
+
+
+class A
+  def initialize(*rest)
+    puts "*rest=#{rest}"
+  end
+end
+
+class B < A
+  def initialize(first, *rest)
+    # 第一引数を表示
+    puts "first1=#{first}"
+    # 第二引数以降を表示
+    puts "rest1=#{rest}"
+    # initializeと同じ引数でclass Aのinitializeを呼び出す
+    super
+    # 明示的に引数なしを指定すると引数なしでclass Aのinitializeを呼び出せる
+    super()
+  end
+end
+
+obj1 = B.new("A","B","C","D","E")
+
+
+module MyModule
+  # includeされたら以下のメソッドが実行される
+  def self.included(include_class_name)
+    puts "MyModlueは#{include_class_name}にmixinされた"
+  end
+end
+
+class MyClass
+  include MyModule
+end
+
+
+module MyModule
+  def my_method
+    puts "my_method"
+  end
+  module_function :my_method
+end
+
+puts MyModule.my_method #=> my_method
+puts MyModule.private_methods.include? :my_method #=> true
+
+
+module MyModule
+  module_function # これ以降に記述したメソッドはすべてモジュール関数となる
+  def my_method
+    puts "my_method"
+  end
+end
+
+puts MyModule.my_method
+
+class C
+  include MyModule
+  def test_method
+      my_method
+  end
+end
+
+c = C.new
+c.my_method
+c.test_method
+
+
+class C
+  def foo
+    puts 'foo'
+  end
+  undef foo #=> 削除OK
+end
+
+class C
+  def foo
+    puts 'foo'
+  end
+  undef :foo #=> 削除OK
+end
+
+class C
+  def foo
+    puts 'foo'
+  end
+  undef 'foo' #=> SyntaxError: unexpected tSTRING_BEG undef 'foo'
+end
+
+
+class C
+  def foo
+    puts 'foo'
+  end
+  undef_method foo #=> NameError: undefined local variable or method `foo' for C:Class
+end
+
+class C
+  def foo
+    puts 'foo'
+  end
+  undef_method :foo #=> C 削除OK
+end
+
+class C
+  def foo
+    puts 'foo'
+  end
+  undef_method 'foo' #=> C 削除OK
+end
+
+
+class C
+  def internal_use_private_and_protected
+    protected_method # 呼び出し可
+    private_method # 呼び出し可
+  end
+
+  def internal_use_private_and_protected_with_reciever
+    self.protected_method # 呼び出し可。自クラスから呼び出し可。
+    self.private_method # 呼び出し不可。レシーバーから呼び出せない。
+  end
+
+  def use_protected(other)
+    other.protected_method # 自クラス、サブクラスなら呼び出し可。
+  end
+
+  protected
+  def protected_method
+    puts "protected_method"
+  end
+
+  private
+  def private_method
+    puts "private_method"
+  end
+end
+
+class D < C
+end
+
+c = C.new
+# 外部から直接呼び出し不可
+c.protected_method #=> NoMethodError: protected method `protected_method' called for
+
+# 外部から直接呼び出し不可
+c.private_method #=> NoMethodError: private method `private_method' called for
+
+# レシーバーなしでは両方呼び出し可
+c.internal_use_private_and_protected
+#=> protected_method
+#=> private_method
+
+# レシーバーあり(自クラス)ではprotectedのみ呼び出せる
+c.internal_use_private_and_protected_with_reciever
+#=> protected_method
+#=> NoMethodError: private method `private_method' called for
+
+d = D.new
+# サブクラスから呼び出し可
+d.use_protected(d) #=>protected_method
+
+
+def m
+  begin
+    1
+  rescue
+    2
+  else
+    3
+  ensure
+    4
+  end
+end
+
+p m
+
+
+X = 'abc'.freeze
+def m
+  X #  (1)
+  X = 'def' # (2)
+  X += 'def' #(3)
+  X << 'def' # (4)
+end
+
+
+v1 = 1 / 2 == 0
+v2 = !!v1 or raise RuntimeError
+puts v2 and false #false
+
+
+class IPAddr
+  include Enumerable
+
+  def initialize(ip_addr)
+    @ip_addr = ip_addr
+  end
+
+  def each
+    return enum_with unless block_given?
+
+    @ip_addr.split('.').each do |octet|
+      yield octet
+    end
+  end
+end
+
+addr = IPAddr.new("192.10.20.30")
+enum = addr.each
+
+p enum.next # 192と表示される
+p enum.next # 10と表示される
+p enum.next # 20と表示される
+p enum.next # 30と表示される
+
+10.times{|d| print d < 2...d > 5 ? "O" : "X" }
+
+def foo(arg1:100, arg2:200)
+  puts arg1
+  puts arg2
+end
+
+option = {arg2: 900}
+p *option
+
+foo arg1: 200, *option
+foo arg1: 200, **option
+
+
+
