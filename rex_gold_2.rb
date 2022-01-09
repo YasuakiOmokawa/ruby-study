@@ -3084,3 +3084,82 @@ begin
 rescue => e
   puts e.class
 end
+
+
+f = Fiber.new do
+  raise StandardError, "hoge"
+end
+begin
+  f.resume # ここで StandardError が発生
+rescue => e # 型を省略しているので StandardError を捕まえる
+  p e.message #=> "hoge"が出力する
+end
+
+f = Fiber.new do
+  Fiber.yield 'no_error'
+  raise StandardError, "hoge"
+end
+begin
+  p f.resume # 'no_error'
+  # f.resume # ここで StandardError が発生
+rescue => e # 型を省略しているので StandardError を捕まえる
+  p e.message #=> "hoge"が出力する
+end
+
+
+class S
+  def initialize
+    puts "S#initialize"
+  end
+end
+
+class C < S
+  def initialize(*args)
+    super
+    puts "C#initialize"
+  end
+end
+
+C.new(1,2,3,4,5)
+
+
+m = Module.new
+
+CONST = "Constant in Toplevel"
+
+_proc = Proc.new do
+  CONST = "Constant in Proc"
+end
+
+m.instance_eval(<<-EOS)
+  CONST = "Constant in Module instance"
+
+  def const
+    CONST
+  end
+EOS
+
+m.module_eval(&_proc)
+# m.module_eval(<<-EOS)
+#   yield &_proc
+# EOS
+
+p m.const
+p m.const_get(:CONST)
+p CONST
+
+
+f = Fiber.new do |total|
+  Fiber.yield total + 10
+end
+
+p f.resume(100) + f.resume(5)
+
+array = ["a", "b", "c"].freeze
+
+array.each do |chr|
+  chr.upcase!
+end
+
+p array
+array << 'd'
