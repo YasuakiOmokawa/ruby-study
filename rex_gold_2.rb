@@ -2971,4 +2971,116 @@ foo arg1: 200, *option
 foo arg1: 200, **option
 
 
+class C
+end
 
+module M
+  refine C do
+    def m1(value)
+      super value - 100
+    end
+  end
+end
+
+class C
+  def m1(value)
+    value - 100
+  end
+end
+
+using M
+
+class K < C
+  def m1(value)
+    super value - 100
+  end
+end
+
+puts K.new.m1 400
+
+
+module M
+  def self.included(klass)
+    klass.extend ClassMethods
+  end
+
+  module ClassMethods
+    def class_m
+      "M.class_m"
+    end
+  end
+
+  def instance_m
+    'M#instance_m'
+  end
+end
+
+class C
+  include M
+end
+
+p C.methods.include? :class_m
+p C.instance_methods.include? :instance_m
+
+
+class Company
+  attr_reader :id
+  attr_accessor :name
+  def initialize id, name
+    @id = id
+    @name = name
+  end
+  def to_s
+    "#{id}:#{name}"
+  end
+  def <=> other
+    self.id <=> other.id
+  end
+end
+
+companies = []
+companies << Company.new(2, 'Liberyfish')
+companies << Company.new(3, 'Freefish')
+companies << Company.new(1, 'Freedomfish')
+
+companies.sort
+companies.sort!
+
+companies.each do |e|
+  puts e
+end
+
+
+val = 0
+
+class B
+end
+
+class C < B
+end
+
+if C < Object
+  val += 100
+else
+  val += 15
+end
+
+if B < C
+  val += 100
+else
+  val += 15
+end
+
+p val
+
+begin
+  raise
+rescue => e
+  puts e.class
+end
+
+begin
+  raise "Err!"
+rescue => e
+  puts e.class
+end
