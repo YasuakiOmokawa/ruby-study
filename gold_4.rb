@@ -16,3 +16,11 @@ using M
 
 puts C.m1 # C.m1 in M と表示されます。
 
+enum = "apple".split('').enum_for
+enum = "apple".to_enum(:each_char)
+
+p enum.next
+p enum.next
+p enum.next
+p enum.next
+p enum.next
