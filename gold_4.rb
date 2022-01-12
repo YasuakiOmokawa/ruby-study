@@ -52,3 +52,19 @@ module M
 end
 
 
+_proc = Proc.new {
+  p Module.nesting
+}
+
+_proc.call # [] が表示されます
+
+m = Module.new
+
+m.instance_eval(<<-EVAL)
+  p Module.nesting # [#<Class:#<Module:0x007fe71194e210>>] と表示されます
+EVAL
+
+m.instance_eval {
+  p Module.nesting # [] と表示されます
+}
+
