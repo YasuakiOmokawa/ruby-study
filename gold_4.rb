@@ -68,3 +68,22 @@ m.instance_eval {
   p Module.nesting # [] と表示されます
 }
 
+
+begin
+  print "liberty" + :fish
+rescue TypeError
+  print "TypeError."
+rescue
+  print "Error."
+else
+  print "Else."
+end #TypeError
+
+
+v1 = 1 / 2 == 0
+v2 = !!v1 or raise RuntimeError
+puts v2 and false
+
+puts true and false
+puts false and true
+puts true and 'hoge'
