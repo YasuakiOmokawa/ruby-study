@@ -97,3 +97,42 @@ end
 option = {arg2: 900}
 
 foo arg1: 200, *option
+
+
+module M
+  def self.included(base)
+    base.extend(ClassMethods)
+  end
+
+  module ClassMethods
+    def class_m
+      "M.class_m"
+    end
+  end
+end
+
+class C
+  include M
+end
+
+p C.methods.include? :class_m
+
+
+module Bar
+  def self.included(klass)
+    klass.extend ClassMethods
+  end
+
+  module ClassMethods
+    def bar
+      puts "bar"
+    end
+  end
+end
+
+class Foo
+  include Bar
+end
+
+Foo.bar #=> bar
+
