@@ -136,3 +136,10 @@ end
 
 Foo.bar #=> bar
 
+
+begin
+  raise "Err!"
+rescue => e
+  puts e.class
+end
+
