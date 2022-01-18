@@ -159,3 +159,18 @@ end
 
 C.new(1,2,3,4,5)
 
+module M
+  p Module.nesting # [M]
+end
+
+M.module_eval(<<-EVAL)
+  p Module.nesting # [M]
+EVAL
+
+M.instance_eval do
+  p Module.nesting # []
+end
+
+module M
+  p Module.nesting # [M]
+end
