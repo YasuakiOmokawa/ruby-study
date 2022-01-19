@@ -174,3 +174,17 @@ end
 module M
   p Module.nesting # [M]
 end
+
+f = Fiber.new do |name|
+  Fiber.yield "Hi, #{name}"
+end
+
+p f.resume('Matz') # 'Hi, Matz'と表示されます。
+f.resume('hoge')
+
+f = Fiber.new do |total|
+  Fiber.yield total + 10
+end
+
+p f.resume(100) + f.resume(5)
+
