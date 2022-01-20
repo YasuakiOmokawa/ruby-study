@@ -188,3 +188,15 @@ end
 
 p f.resume(100) + f.resume(5)
 
+
+array = ["a", "b", "c"].freeze
+array << "d" # 例外発生
+
+p array
+array.each do |char|
+  char.upcase!
+end
+p array
+
+
+ls Kernel
