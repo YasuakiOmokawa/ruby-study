@@ -200,3 +200,34 @@ p array
 
 
 ls Kernel
+
+Const = "top"
+
+module M
+  Const = "m"
+end
+
+class C1
+  include M
+
+  def c1
+    ::Const
+  end
+end
+
+class C2
+  def c2
+    M::Const
+  end
+end
+
+class C3 < C1
+end
+
+p C1.new.c1 # => "top"
+p C2.new.c2 # => "m"
+p Const     # => "top"
+p M::Const  # => "m"
+p C1::Const # => "m"
+p C3::Const # => "m"
+
