@@ -231,3 +231,49 @@ p M::Const  # => "m"
 p C1::Const # => "m"
 p C3::Const # => "m"
 
+
+class Foo
+  @var = 1
+
+  def initialize
+    @var = 2
+  end
+
+  def var
+    @var
+  end
+
+  def self.var
+    @var
+  end
+end
+
+p Foo.var     # => 1
+p Foo.new.var # => 2
+
+
+class Foo
+  @var = 1
+end
+
+def Foo.var
+  @var
+end
+
+p Foo.var     # => 1
+
+
+class Foo
+  @var = "Ruby"
+
+  def self.var
+    "#{@var} / Examination"
+  end
+end
+
+class Baz < Foo
+end
+
+p Foo.var # => "Ruby / Examination"
+p Baz.var # => " / Examination"
+
