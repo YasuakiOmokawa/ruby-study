@@ -225,3 +225,15 @@ end
 
 p C.ancestors
 
+
+$num = 0
+1..10.times do |n|
+  require './require'
+end
+puts $num
+
+$num = 0
+1..10.times do |n|
+  load './require.rb'
+end
+puts $num
