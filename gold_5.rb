@@ -268,3 +268,76 @@ end
 option = {arg2: 900}
 
 foo arg1: 200, **option
+
+
+begin
+  print "liberty" + :fish
+rescue TypeError
+  print "TypeError."
+rescue
+  print "Error."
+else
+  print "Else."
+ensure
+  print "Ensure."
+end
+
+
+class Foo
+  attr_reader :var
+
+  @var = "1"
+
+  def initialize
+    @var = "2"
+  end
+end
+
+class Baz < Foo
+  def self.var
+    @var
+  end
+end
+
+def Foo.var
+  @var
+end
+
+arr = [
+  Foo.new.var,
+  Foo.var,
+  Baz.new.var,
+  Baz.var
+]
+
+p arr
+
+
+class C
+end
+
+module M
+  refine C do
+    def m1(value)
+      super value - 100
+    end
+  end
+end
+
+class C
+  def m1(value)
+    value - 100
+  end
+end
+
+using M
+
+class K < C
+  def m1(value)
+    super value - 100
+  end
+end
+
+puts K.new.m1 400
+
+
