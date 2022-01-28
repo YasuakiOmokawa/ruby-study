@@ -367,3 +367,71 @@ S.new
 p C.class_variable_get(:@@val)
 
 
+module M1
+  class C1
+    CONST = '001'.freeze
+  end
+
+  class C2 < C1
+    CONST = '010'.freeze
+
+    module M2
+      CONST = '011'.freeze
+
+      class Ca
+        CONST = '100'.freeze
+      end
+
+      class Cb < Ca
+        p CONST
+        #=> "011"
+        p Module.nesting
+        #=> [M1::C2::M2::Cb, M1::C2::M2, M1::C2, M1]
+      end
+    end
+  end
+end
+
+
+class C
+  CONST = 'Good, night'.freeze
+end
+
+module M
+  CONST = 'Good, evening'.freeze
+end
+
+module M
+  class C
+    CONST = 'Hello, world'.freeze
+  end
+end
+
+module M
+  class C
+    p CONST
+    #=> "Hello, world"
+    p Module.nesting
+    #=> [M::C, M]
+  end
+end
+
+
+def foo(n)
+  n ** n
+end
+
+puts foo (2) * 2
+puts foo(2) * 2
+
+
+x = 0
+def hoge
+  (1...5).each do |_i|
+    x += _i #> `block in hoge': undefined method `+' for nil:NilClass (NoMethodError)
+  end
+  puts x
+end
+hoge
+
+
