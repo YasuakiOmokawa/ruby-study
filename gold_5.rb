@@ -462,3 +462,33 @@ companies.each do |e|
 end
 
 
+class Hoge
+  def say(message)
+    puts message
+  end
+end
+
+class Piyo < Hoge
+  def say(message)
+    super
+    puts 'Piyo'
+  end
+end
+
+p Piyo.new.say('Hello')
+
+
+class Hoge2
+  def say
+    puts message
+  end
+end
+
+class Piyo2 < Hoge2
+  def say(message)
+    super
+    puts 'Piyo'
+  end
+end
+
+p Piyo2.new.say('Hello')
