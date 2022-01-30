@@ -492,3 +492,22 @@ class Piyo2 < Hoge2
 end
 
 p Piyo2.new.say('Hello')
+
+
+characters = ["a", "b", "c"]
+characters.freeze
+
+characters.each do |chr|
+  chr.freeze
+end
+
+upcased = characters.map do |chr|
+  p chr.object_id
+  chr.upcase
+  p chr.object_id
+end
+
+p upcased
+c = 'a'
+c.freeze
+c = 'b'
