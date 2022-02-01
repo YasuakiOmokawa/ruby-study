@@ -533,3 +533,57 @@ v2 = !!v1 or raise RuntimeError
 puts v2 and false
 
 
+module K
+  CONST = "Good, night"
+  class P
+  end
+end
+
+module K::P::M
+  class C
+    CONST = "Good, evening"
+  end
+end
+
+module M
+  class C
+    CONST = "Hello, world"
+  end
+end
+
+class K::P
+  class M::C
+    p CONST
+  end
+end
+
+
+require 'yaml'
+
+yaml = <<YAML
+  sum: 510,
+  orders:
+    - 260
+    - 250
+YAML
+
+object = YAML.load yaml
+
+p object
+
+
+class Human
+  NAME = "Unknown"
+
+  def self.name
+    const_get(:NAME)
+  end
+end
+
+class Fukuzawa < Human
+  NAME = "Yukichi"
+end
+
+puts Fukuzawa.name
+
+
