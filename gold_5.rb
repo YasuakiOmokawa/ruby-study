@@ -587,3 +587,79 @@ end
 puts Fukuzawa.name
 
 
+
+def func(hash)
+  p hash
+  p **hash
+end
+
+func {:key => "val"}
+
+hoge = 'a'
+def hoge.singleton
+  'singleton is'
+end
+hoge.freeze
+p hoge.frozen?
+p hoge.singleton
+duped = hoge.dup
+p duped.frozen?
+p duped.singleton
+cloned = hoge.clone
+p cloned.frozen?
+p cloned.singleton
+
+
+class C
+  def func; puts "Hello"; end
+end
+
+class Child < C
+  undef_method :func
+end
+
+class GrandChild < Child
+end
+
+C.new.func # => Hello
+Child.new.func # => NoMethodError
+GrandChild.new.func # => NoMethodError
+
+
+class C
+  def func; puts "Hello"; end
+end
+
+class Child < C
+  remove_method :func
+end
+
+class GrandChild < C
+end
+
+C.new.func # => Hello
+Child.new.func # => NoMethodError
+GrandChild.new.func # => NoMethodError
+
+
+class C
+  def f; puts "World"; end
+end
+
+class Child < C
+  def f; puts "Hello"; end
+end
+
+child = Child.new
+puts child.f
+
+Child.class_eval { remove_method :f }
+
+puts child.f
+
+
+class String
+  alias_method 'hoge', 'reverse'
+  alias hoge2 reverse
+end
+
