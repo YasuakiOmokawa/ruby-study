@@ -663,3 +663,73 @@ class String
   alias hoge2 reverse
 end
 
+
+class Company
+  attr_reader :id
+  attr_accessor :name
+  def initialize id, name
+    @id = id
+    @name = name
+  end
+  def to_s
+    "#{id}:#{name}"
+  end
+  def <=> other
+    other.id <=> self.id
+  end
+end
+
+companies = []
+companies << Company.new(2, 'Liberyfish')
+companies << Company.new(3, 'Freefish')
+companies << Company.new(1, 'Freedomfish')
+
+companies.sort!
+
+companies.each do |e|
+  puts e
+end
+
+
+enum_char = Enumerator.new do |yielder|
+  "apple".each_char do |chr|
+    yielder << chr
+  end
+end
+
+array = enum_char.map do |chr|
+  chr.ord
+end
+
+p array
+
+
+def foo(arg1:100, arg2:200)
+  puts arg1
+  puts arg2
+end
+
+option = {arg2: 900}
+
+foo arg1: 200, *option
+
+
+module SuperMod
+end
+
+module SuperMod::BaseMod
+  p Module.nesting
+end
+
+
+array = ["a", "b", "c"].freeze
+
+array.each do |chr|
+  chr.upcase!
+end
+
+p array
+
+array.first.freeze
+array.first.upcase!
+
