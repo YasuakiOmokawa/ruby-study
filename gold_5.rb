@@ -733,3 +733,66 @@ p array
 array.first.freeze
 array.first.upcase!
 
+
+
+class C
+  def call_protected
+    protected_method
+  end
+
+  def with_receiver
+    self.protected_method
+  end
+
+  def with_receiver_private
+    self.private_method
+  end
+
+  protected
+
+  def protected_method; "protected"; end
+
+  private
+
+  def private_method; 'private'; end
+end
+
+p C.new.protected_method
+p C.new.call_protected
+p C.new.with_receiver
+p C.new.with_receiver_private
+
+
+a = 1 + "(1/2r)".to_r
+p a.class # => Rational
+
+a = a + 1.0
+p a.class # => Float
+
+a = a + "(1/2r)".to_r
+p a.class # => Float
+
+a = a + "(1 + 2i)".to_c
+p a.class # => Complex
+
+a = a + '(1/2r)'.to_r # Complex
+p a.class
+
+
+module M
+  def class_m
+    "class_m"
+  end
+end
+
+class C
+  include M
+end
+
+p C.methods.include? :class_m
+
+def keys(x:, y: 123)
+  p x
+  p y
+end
+keys(y: 456)
